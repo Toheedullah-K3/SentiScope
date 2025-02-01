@@ -1,22 +1,31 @@
 import express from 'express';
 import cors from 'cors';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+
+
 
 const app = express();
-const PORT = 3000;
 
-// Middleware to enable CORS and parse JSON requests
+// Configure CORS
 app.use(cors({ origin: 'http://localhost:5173' }));
-app.use(express.json());
+
+
+// Middlewares
+app.use(express.json({limit: "16kb"}))
+app.use(express.urlencoded({extended: true, limit: "16kb"}))
+app.use(express.static("public"))
+app.use(cookieParser())
+app.use(express.json())
+
+
 
 app.get('/', (req, res) => {
-  res.send('I Am Running a Server');
+  res.send('Hello World!');
 });
 
-app.get('/dummy', (req, res) => {
-  res.send('Dummy Data Running');
-});
 
-// Route to handle form submission (POST request)
+
 app.post('/submit', (req, res) => {
   const { name, email } = req.body;
   console.log('Received data:', { name, email });
@@ -24,6 +33,11 @@ app.post('/submit', (req, res) => {
   res.json({ message: 'Form submitted successfully!', receivedData: { name, email } });
 });
 
+
+// routes import
+
+
+// routes
 
 
 export { app }
