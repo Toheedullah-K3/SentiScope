@@ -1,29 +1,20 @@
-import express from 'express';
-import cors from 'cors';
+import dotenv from 'dotenv';
+import { app } from './app.js';
+import connectDB  from './db/index.js';
 
-const app = express();
-const PORT = 3000;
-
-// Middleware to enable CORS and parse JSON requests
-app.use(cors({ origin: 'http://localhost:5173' }));
-app.use(express.json());
-
-app.get('/', (req, res) => {
-  res.send('I Am Running a Server');
+dotenv.config({
+  path: './.env'
 });
 
-app.get('/dummy', (req, res) => {
-  res.send('Dummy Data Running');
-});
+const PORT = process.env.PORT || 3000;
 
-// Route to handle form submission (POST request)
-app.post('/submit', (req, res) => {
-  const { name, email } = req.body;
-  console.log('Received data:', { name, email });
-
-  res.json({ message: 'Form submitted successfully!', receivedData: { name, email } });
-});
-
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`)
+    })
+  })
+  .catch((error) => {
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
+  });
