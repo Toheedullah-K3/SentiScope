@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import LogoImage from '../../assets/images/logo.svg'
+import LogoImage from '../../assets/images/logo.png'
 import { Button } from '../index.js'
 
 
@@ -35,7 +35,7 @@ const Navbar = () => {
                         <img 
                             src={LogoImage} 
                             alt="Logo Image" 
-                            className='h-4 md:h-auto w-auto' 
+                            className='h-4 md:h-12 w-auto' 
                         />
                     </div>
                     <div className='hidden lg:flex justify-center align-center'>
