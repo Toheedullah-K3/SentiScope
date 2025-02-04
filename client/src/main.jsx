@@ -1,5 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
+import { Provider } from 'react-redux'
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 import './assets/styles/style.css'
 
@@ -23,5 +24,7 @@ const routes = createRoutesFromElements(
 const router = createBrowserRouter(routes);
 
 createRoot(document.getElementById('root')).render(
-  <RouterProvider router={router} />,
+  <Provider store={store}>
+    <RouterProvider router={router} />,
+  </Provider>
 )
