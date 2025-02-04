@@ -8,19 +8,23 @@ const Navbar = () => {
     const navItems = [
         {
             name: 'Home',
-            slug: '/'
+            slug: '/',
+            active: true
         },
         {
-            name: 'Login',
-            slug: '/login'
+            name: 'About',
+            slug: '/about-us',
+            active: true
         },
         {
-            name: 'Signup',
-            slug: '/signup'
+            name: 'Trending',
+            slug: '/signup',
+            active: true
         },
         {
-            name: 'User Profile',
-            slug: '/user-profile'
+            name: 'Highlights',
+            slug: '/user-profile',
+            active: true
         }
     ]
     return (
@@ -31,7 +35,7 @@ const Navbar = () => {
                         <img 
                             src={LogoImage} 
                             alt="Logo Image" 
-                            className='h-9 md:h-auto w-auto' 
+                            className='h-4 md:h-auto w-auto' 
                         />
                     </div>
                     <div className='hidden lg:flex justify-center align-center'>
