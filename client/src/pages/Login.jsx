@@ -19,11 +19,7 @@ const Login = () => {
             <h2 className="my-4 text-white uppercase text-3xl">Welcome Back!</h2>
 
 
-            {/* ---------------- */}
-
-
-
-            {/* ---------------- */}
+        
 
             <div className="input-div relative flex items-center border-b-2 border-gray-300 py-2 my-0">
               <i className="fas fa-user text-lime-400 mr-2"></i>
