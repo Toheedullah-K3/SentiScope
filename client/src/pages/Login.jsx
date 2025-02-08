@@ -20,9 +20,9 @@ const Login = () => {
             <h2 className="my-4 text-white uppercase text-3xl">Welcome Back!</h2>
 
 
-            <Input type="text" placeholder="Username" />
+            <Input type="text" placeholder="Username" icon="user" />
 
-            <Input type="password" placeholder="Password" />
+            <Input type="password" placeholder="Password" icon="lock"/>
 
 
             <a href="#" className="block text-right text-white text-sm hover:text-lime-400 transition">Forgot Password?</a>
