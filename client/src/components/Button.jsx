@@ -9,7 +9,7 @@ const Button = ({
 }) => {
     const baseStyles = "px-6 py-2 rounded-full font-medium cursor-pointer"
     const variantStyle = {
-        primary: "bg-lime-400 text-neutral-950 border-lime-400", 
+        primary: "bg-lime-400 text-neutral-950 border-lime-400 hover:bg-lime-500 transition", 
         secondary: "border border-white text-white bg-transparent",
         danger: "bg-red-600 text-white border-red-600"
     }

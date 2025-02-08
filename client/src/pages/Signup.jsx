@@ -18,30 +18,15 @@ const Signup = () => {
             <img src={avatar} className='h-[100px] mx-auto' alt="avatar" />
             <h2 className="my-4 text-white uppercase text-3xl">Join Us!</h2>
 
-            <div className="relative flex items-center border-b-2 border-gray-300 py-2 my-4">
-              <i className="fas fa-user text-lime-400 mr-2"></i>
-              <div className="w-full relative">
-                {/* <h5 className="absolute left-2 top-1/2 transform -translate-y-1/2 text-white text-lg transition-all">Username</h5> */}
-                <Input type="text" placeholder="Username" />
-              </div>
-            </div>
 
-            <div className="relative flex items-center border-b-2 border-gray-300 py-2 my-4">
-              <i className="fas fa-envelope text-lime-400 mr-2"></i>
-              <div className="w-full relative">
-                <Input type="email" placeholder="Email" />
-              </div>
-            </div>
+                <Input type="text" placeholder="Username" icon="user"/>
 
-            <div className="relative flex items-center border-b-2 border-gray-300 py-2 my-4">
-              <i className="fas fa-lock text-lime-400 mr-2"></i>
-              <div className="w-full relative">
-                <Input type="password" placeholder="Password" />
-              </div>
-            </div>
+                <Input type="email" placeholder="Email" icon="envelope"/>
+
+                <Input type="password" placeholder="Password" icon="lock"/>
 
 
-            <Button type="submit" className="w-full mt-4 py-3 text-white uppercase font-bold rounded-lg hover:bg-lime-500 transition">Sign Up</Button>
+            <Button type="submit" className="w-full mt-4 py-3 text-white uppercase font-bold rounded-lg">Sign Up</Button>
           </form>
         </div>
       </div>
