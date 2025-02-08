@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import wave from '../assets/images/wave.png'
 import LoginBG from '../assets/images/LoginBG.svg'
 import avatar from '../assets/images/avatar.svg'
-import { Button } from '../components/index.js'
+import { Button, Input } from '../components/index.js'
 
 const Signup = () => {
 
@@ -22,21 +22,21 @@ const Signup = () => {
               <i className="fas fa-user text-lime-400 mr-2"></i>
               <div className="w-full relative">
                 {/* <h5 className="absolute left-2 top-1/2 transform -translate-y-1/2 text-white text-lg transition-all">Username</h5> */}
-                <input type="text" placeholder="Username" className="w-full bg-transparent outline-none text-white text-lg pl-2" />
+                <Input type="text" placeholder="Username" />
               </div>
             </div>
 
             <div className="relative flex items-center border-b-2 border-gray-300 py-2 my-4">
               <i className="fas fa-envelope text-lime-400 mr-2"></i>
               <div className="w-full relative">
-                <input type="email" placeholder="Email" className="w-full bg-transparent outline-none text-white text-lg pl-2" />
+                <Input type="email" placeholder="Email" />
               </div>
             </div>
 
             <div className="relative flex items-center border-b-2 border-gray-300 py-2 my-4">
               <i className="fas fa-lock text-lime-400 mr-2"></i>
               <div className="w-full relative">
-                <input type="password" placeholder="Password" className="w-full bg-transparent outline-none text-white text-lg pl-2" />
+                <Input type="password" placeholder="Password" />
               </div>
             </div>
 
