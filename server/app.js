@@ -20,24 +20,11 @@ app.use(express.json())
 
 
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
-
-
-app.post('/submit', (req, res) => {
-  const { name, email } = req.body;
-  console.log('Received data:', { name, email });
-
-  res.json({ message: 'Form submitted successfully!', receivedData: { name, email } });
-});
-
 
 // routes import
-
+import userRouter from './routes/user.route.js'
 
 // routes
-
+app.use('/api/v1/users', userRouter)
 
 export { app }
