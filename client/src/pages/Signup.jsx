@@ -29,6 +29,8 @@ const Signup = () => {
           navigate('/login')
         } catch (error) {
           setError(error.response.data.message || "An unexpected error occurred.");
+        } finally {
+          setLoading(false)
         }
     }
   return ( 
@@ -77,8 +79,10 @@ const Signup = () => {
                   {...register('password', {required: true})}
                 />
 
-
-            <Button type="submit" className="w-full mt-4 py-3 text-white uppercase font-bold rounded-lg">Sign Up</Button>
+                  
+            <Button type="submit" className="w-full mt-4 py-3 text-white uppercase font-bold rounded-lg">
+              {loading ? 'Loading' : 'Sign Up'}
+            </Button>
           </form>
         </div>
       </div>
