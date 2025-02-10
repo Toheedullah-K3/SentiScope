@@ -64,7 +64,7 @@ const registerUser = async (req, res) => {
     }
 };
 
-const login = async (req, res) => {
+const loginUser = async (req, res) => {
     // get the data from request
     // validate the username or email and password
     // check if user exists in db
@@ -118,5 +118,5 @@ const login = async (req, res) => {
 
 export {
     registerUser,
-    login
+    loginUser
 }
