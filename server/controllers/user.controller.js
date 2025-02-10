@@ -70,6 +70,7 @@ const login = async (req, res) => {
     // check if user exists in db
     // compare the password
     // generate access and refresh token
+    // remove password & refreshToken from response
     // send cookies 
     // send success response
 
@@ -90,8 +91,27 @@ const login = async (req, res) => {
     if (!isPasswordValid) {
         return res.status(400).json({ message: 'Invalid credentials' });
     }
-    
-    return res.status(200).json(user);
+
+    const {accessToken, refreshToken} = await generateAccessAndRefreshToken(user._id);
+
+    const loggedInUser = await User.findById(user._id).select('-password -refreshToken');
+
+    const options = {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true
+    }
+
+    return res
+        .status(200)
+        .cookie("refreshToken", refreshToken, options)
+        .cookie("accessToken", accessToken, options)
+        .json({ 
+            user: loggedInUser, 
+            accessToken, 
+            refreshToken,
+            message: 'Login Successful'
+        });
 }
 
 
