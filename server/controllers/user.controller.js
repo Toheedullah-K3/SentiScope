@@ -1,5 +1,22 @@
 import User from '../models/user.model.js'
 
+const generateAccessAndRefreshToken = async (userId) => {
+    // find the user by userId
+    // generate access token
+    // generate refresh token
+    // save refresh token in db
+    // return access token and refresh token
+
+    const user = await User.findById(userId)
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
+
+    user.refreshToken = refreshToken
+    await user.updateOne({ refreshToken });
+
+    return { accessToken, refreshToken }
+}
+
 const registerUser = async (req, res) => {
     // get the data from request
     // validate the data (check if all required fields are present)
@@ -16,13 +33,13 @@ const registerUser = async (req, res) => {
     }
 
     const existingUser = await User.findOne(
-        { 
-            $or: [{username}, {email}] 
+        {
+            $or: [{ username }, { email }]
         }
     );
 
 
-    if(existingUser) {
+    if (existingUser) {
         return res.status(400).json({ message: 'User already exists' });
     }
 
@@ -33,20 +50,53 @@ const registerUser = async (req, res) => {
             password
         });
 
-        if(!user) {
+        if (!user) {
             return res.status(400).json({ message: 'User not created' });
         }
 
         user.password = undefined;
         user.refreshToken = undefined;
 
-        return res.status(201).json({ user })   
+        return res.status(201).json({ user })
 
     } catch (error) {
         console.log("Error in Creating User: ", error)
     }
 };
 
+const login = async (req, res) => {
+    // get the data from request
+    // validate the username or email and password
+    // check if user exists in db
+    // compare the password
+    // generate access and refresh token
+    // send cookies 
+    // send success response
+
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Please enter all fields' });
+    }
+
+    const user = await User.findOne({ email })
+
+    if (!user) {
+        return res.status(400).json({ message: 'User does not exist' });
+    }
+
+    const isPasswordValid = await user.comparePassword(password);
+
+    if (!isPasswordValid) {
+        return res.status(400).json({ message: 'Invalid credentials' });
+    }
+    
+    return res.status(200).json(user);
+}
+
+
+
 export {
-    registerUser
+    registerUser,
+    login
 }

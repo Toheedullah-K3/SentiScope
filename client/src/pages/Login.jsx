@@ -20,7 +20,7 @@ const Login = () => {
             <h2 className="my-4 text-white uppercase text-3xl">Welcome Back!</h2>
 
 
-            <Input type="text" placeholder="Username" icon="user" />
+            <Input type="text" placeholder="Email" icon="envelope" />
 
             <Input type="password" placeholder="Password" icon="lock"/>
 
