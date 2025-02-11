@@ -11,7 +11,7 @@ import Home from './pages/Home.jsx'
 import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
 import UserProfile from './pages/UserProfile.jsx'
-
+import Dashboard from './pages/Dashboard.jsx'
 
 const routes = createRoutesFromElements(
   <Route element={<App />}>
@@ -19,6 +19,7 @@ const routes = createRoutesFromElements(
     <Route path="/login" element={<Login />} />
     <Route path="/signup" element={<Signup />} />
     <Route path="/user-profile" element={<UserProfile />} />
+    <Route path="/dashboard" element={<Dashboard />} />
   </Route>
 )
 

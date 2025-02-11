@@ -26,7 +26,7 @@ const Login = () => {
         withCredentials: true
       })
       console.log(response.data)
-      navigate('/')
+      navigate('/dashboard')
       
     } catch (error) {
       setError(error.response.data.message || "An unexpected error occurred.");
