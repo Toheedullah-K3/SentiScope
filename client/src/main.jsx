@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 import './assets/styles/style.css'
 import store from './store/store.js'
- 
+
 // pages
 import App from './App.jsx'
 import Home from './pages/Home.jsx'
@@ -12,14 +12,43 @@ import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
 import UserProfile from './pages/UserProfile.jsx'
 import Dashboard from './pages/Dashboard.jsx'
+import {AuthLayout} from './components/index.js'
 
 const routes = createRoutesFromElements(
   <Route element={<App />}>
     <Route path="/" element={<Home />} />
-    <Route path="/login" element={<Login />} />
-    <Route path="/signup" element={<Signup />} />
-    <Route path="/user-profile" element={<UserProfile />} />
-    <Route path="/dashboard" element={<Dashboard />} />
+    <Route
+      path="/login"
+      element={
+        <AuthLayout authentication={false}>
+          <Login />
+        </AuthLayout>
+      }
+    />
+    <Route
+      path="/signup"
+      element={
+        <AuthLayout authentication={false}>
+          <Signup />
+        </AuthLayout>
+      }
+    />
+    <Route
+      path="/user-profile"
+      element={
+        <AuthLayout authentication>
+          <UserProfile />
+        </AuthLayout>
+      }
+    />
+    <Route
+      path="/dashboard"
+      element={
+        <AuthLayout authentication>
+          <Dashboard />
+        </AuthLayout>
+      }
+    />
   </Route>
 )
 
