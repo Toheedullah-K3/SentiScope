@@ -101,7 +101,7 @@ const loginUser = async (req, res) => {
         sameSite: 'None',
         secure: true
     }
-
+    
     return res
         .status(200)
         .cookie("refreshToken", refreshToken, options)

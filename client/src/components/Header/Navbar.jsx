@@ -44,9 +44,7 @@ const Navbar = () => {
                                 <li key={item.slug}>
                                     <NavLink
                                         to={item.slug}
-                                        exact
-                                        className='text-white hover:text-lime-400'
-                                        activeClassName='text-lime-400'
+                                        className={({ isActive }) => isActive ? 'text-lime-400' : 'text-white hover:text-lime-400'}
                                     >
                                         {item.name}
                                     </NavLink>
