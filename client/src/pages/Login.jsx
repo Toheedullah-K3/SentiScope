@@ -2,6 +2,8 @@ import React, {useState} from 'react'
 import { Button, Input } from '../components/index.js'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { login as authLogin } from '../store/authSlice.js'
 
 // import images
 import wave from '../assets/images/wave.png'
@@ -14,6 +16,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const { register, handleSubmit } = useForm()
 
   const apiUrl = import.meta.env.VITE_API_URL
@@ -25,8 +28,11 @@ const Login = () => {
       const response = await axios.post(`${apiUrl}/api/v1/users/login`, data, {
         withCredentials: true
       })
-      console.log(response.data)
-      navigate('/dashboard')
+      if(response){
+        const userData = response.data
+        dispatch(authLogin(userData))
+        navigate('/dashboard')
+      }
       
     } catch (error) {
       setError(error.response.data.message || "An unexpected error occurred.");
