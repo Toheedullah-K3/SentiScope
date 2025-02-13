@@ -114,9 +114,12 @@ const loginUser = async (req, res) => {
         });
 }
 
-
+const logoutUser = async (req, res) => {
+    return res.status(200).json({ message: 'Logout Successful' });
+}
 
 export {
     registerUser,
-    loginUser
+    loginUser,
+    logoutUser
 }
