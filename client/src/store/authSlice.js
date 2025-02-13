@@ -7,7 +7,7 @@ const initialState = {
 
 const authSlice = createSlice({
     name: 'auth',
-    initialState, 
+    initialState,
     reducers: {
         login: (state, action) => {
             state.status = true;
@@ -16,10 +16,15 @@ const authSlice = createSlice({
         logout: (state) => {
             state.status = false;
             state.userData = null
-    }
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase('persist/REHYDRATE', (state, action) => {
+            console.log('Redux Persist Rehydrating:', action.payload);
+        });
     }
 });
 
-export const {login, logout} = authSlice.actions;
+export const { login, logout } = authSlice.actions;
 
 export default authSlice.reducer;

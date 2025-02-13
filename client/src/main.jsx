@@ -1,11 +1,10 @@
-import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { Provider } from 'react-redux'
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 import './assets/styles/style.css'
-import store from './store/store.js'
+
+import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
-import { persistor } from './store/store.js'
+import store, { persistor } from './store/store.js'
 
 // pages
 import App from './App.jsx'

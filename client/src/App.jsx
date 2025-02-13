@@ -20,15 +20,14 @@ function App() {
         setLoading(true);
 
         const response = await axios.get(`${apiUrl}/api/v1/users/current-user`);
-        const {user} = response.data
+        const { user } = response.data
         const userData = user
-        if(userData){
-          dispatch(authLogin({userData}));
+        if (userData) {
+          dispatch(authLogin({ userData }));
         }
-
       } catch (error) {
-        dispatch(logout());
-      }finally{
+        // dispatch(logout());
+      } finally {
         setLoading(false);
       }
     }
@@ -36,10 +35,10 @@ function App() {
   }, []);
 
   return (
-   <>
-   <Navbar/>
-    <Outlet />
-   </>
+    <>
+      <Navbar />
+      <Outlet />
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Button, Input } from '../components/index.js'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
@@ -17,7 +17,12 @@ const Login = () => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    }
+  })
 
   const apiUrl = import.meta.env.VITE_API_URL
 
@@ -36,9 +41,9 @@ const Login = () => {
       if (response.status === 200) {
         dispatch(authLogin(userData))
         navigate('/dashboard')
-    }
-  
-      
+      }
+
+
     } catch (error) {
       setError(error.response.data.message || "An unexpected error occurred.");
     } finally {
@@ -55,7 +60,7 @@ const Login = () => {
         </div>
         <div className="flex justify-center items-center text-center xl:justify-start">
 
-          <form 
+          <form
             className='w-[360px] p-6 rounded-lg shadow-lg'
             onSubmit={handleSubmit(loginUser)}
           >
@@ -63,11 +68,11 @@ const Login = () => {
             <h2 className="my-4 text-white uppercase text-3xl">Welcome Back!</h2>
 
 
-            <Input 
-              type="email" 
-              placeholder="Email" 
-              icon="envelope" 
-              {...register('email', { 
+            <Input
+              type="email"
+              placeholder="Email"
+              icon="envelope"
+              {...register('email', {
                 required: true,
                 validate: {
                   matchPattern: (value) =>
@@ -77,9 +82,9 @@ const Login = () => {
               })}
             />
 
-            <Input 
-              type="password" 
-              placeholder="Password" 
+            <Input
+              type="password"
+              placeholder="Password"
               icon="lock"
               {...register('password', { required: true })}
             />
