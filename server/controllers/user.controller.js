@@ -27,7 +27,7 @@ const registerUser = async (req, res) => {
     // send success response
 
     const { username, email, password } = req.body;
-    console.log(username, email, password)
+
     if (!username || !email || !password) {
         return res.status(400).json({ message: 'Please enter all fields' });
     }

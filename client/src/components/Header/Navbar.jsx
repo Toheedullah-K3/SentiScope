@@ -7,7 +7,8 @@ import { useSelector } from 'react-redux'
 const Navbar = () => {
 
     const authStatus = useSelector(state => state.auth.status)
-    console.log('Auth Status:', authStatus);
+    
+
 
     const navItems = [
         {

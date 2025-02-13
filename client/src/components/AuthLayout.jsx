@@ -11,7 +11,7 @@ const AuthLayout = ({
     const authStatus = useSelector(state => state.auth.status)
 
     useEffect(() => {
-        if(authentication && authStatus === 'false') {
+        if(authentication && authStatus === false) {
             navigate('/login')
         } else {
             setLoading(false)

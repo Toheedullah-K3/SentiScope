@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { Button, Input } from '../components/index.js'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { login as authLogin } from '../store/authSlice.js'
 
 // import images
@@ -28,11 +28,16 @@ const Login = () => {
       const response = await axios.post(`${apiUrl}/api/v1/users/login`, data, {
         withCredentials: true
       })
-      if(response){
-        const userData = response.data
+
+
+      const { user } = response.data
+      const userData = user
+
+      if (response.status === 200) {
         dispatch(authLogin(userData))
         navigate('/dashboard')
-      }
+    }
+  
       
     } catch (error) {
       setError(error.response.data.message || "An unexpected error occurred.");

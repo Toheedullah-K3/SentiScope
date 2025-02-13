@@ -25,7 +25,6 @@ const Signup = () => {
           setLoading(true)
           const response = await axios.post(`${apiUrl}/api/v1/users/register`, data)
           setUser(response.data)
-          console.log(response.data)
           navigate('/login')
         } catch (error) {
           setError(error.response.data.message || "An unexpected error occurred.");
