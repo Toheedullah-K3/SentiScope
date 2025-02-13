@@ -115,7 +115,31 @@ const loginUser = async (req, res) => {
 }
 
 const logoutUser = async (req, res) => {
-    return res.status(200).json({ message: 'Logout Successful' });
+    // get the user from req
+    // remove the refreshToken from db
+    // clear the cookies
+    // send success response
+
+    await User.findByIdAndUpdate(req.user._id,
+        {
+            $unset: {
+                refreshToken: 1
+            }
+        },
+        {
+            new: true
+        }
+    )
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    return res
+    .clearCookie("refreshToken", options)
+    .clearCookie("accessTOken", options)
+    .json({ message: 'Logout Successful' });
+    
 }
 
 export {
