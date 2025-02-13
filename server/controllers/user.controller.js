@@ -142,8 +142,19 @@ const logoutUser = async (req, res) => {
     
 }
 
+const getCurrentUser = async (req, res) => {
+    // get the user from req
+    // remove password & refreshToken from response
+    // send success response
+
+    return res
+    .status(200)
+    .json({ user: req.user });
+}
+
 export {
     registerUser,
     loginUser,
-    logoutUser
+    logoutUser,
+    getCurrentUser
 }
