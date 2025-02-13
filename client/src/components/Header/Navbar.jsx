@@ -62,7 +62,7 @@ const Navbar = () => {
                     <div className='flex justify-end gap-4'>
                         {authStatus && (
                             <NavLink to='/dashboard'>
-                                <Button className='hidden lg:inline-flex items-center font-extrabold'>Dashboard</Button>
+                                <Button className='hidden lg:inline-flex items-center font-extrabold'>Logout</Button>
                             </NavLink>
                         )}
                         {!authStatus && (
