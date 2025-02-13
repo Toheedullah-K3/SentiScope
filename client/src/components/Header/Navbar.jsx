@@ -8,7 +8,7 @@ const Navbar = () => {
 
     const authStatus = useSelector(state => state.auth.status)
     console.log('Auth Status:', authStatus);
-    
+
     const navItems = [
         {
             name: 'Home',
@@ -41,7 +41,7 @@ const Navbar = () => {
                             alt="Logo Image"
                             className='h-4 md:h-12 w-auto'
                         />
-                        <h1>{authStatus}</h1>
+                        <h2 className='text-white'>{authStatus}</h2>
                     </div>
                     <div className='hidden lg:flex justify-center align-center'>
                         <ul className='flex gap-6 font-medium'>
@@ -60,14 +60,22 @@ const Navbar = () => {
                         </ul>
                     </div>
                     <div className='flex justify-end gap-4'>
+                        {authStatus && (
+                            <NavLink to='/dashboard'>
+                                <Button className='hidden lg:inline-flex items-center font-extrabold'>Dashboard</Button>
+                            </NavLink>
+                        )}
+                        {!authStatus && (
+                            <>
+                                <NavLink to='/login'>
+                                    <Button variant='secondary' className='hidden lg:inline-flex items-center'>Log In</Button>
+                                </NavLink>
 
-                        <NavLink to='/login'>
-                            <Button variant='secondary' className='hidden md:inline-flex items-center'>Log In</Button>
-                        </NavLink>
+                                <NavLink to='/signup'>
+                                    <Button className='hidden lg:inline-flex items-center'>Sign Up</Button>
+                                </NavLink></>
+                        )}
 
-                        <NavLink to='/signup'>
-                            <Button className='hidden md:inline-flex items-center'>Sign Up</Button>
-                        </NavLink>
 
                         <svg xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -78,7 +86,7 @@ const Navbar = () => {
                             strokeWidth="2"
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            className="feather feather-menu md:hidden"
+                            className="feather feather-menu lg:hidden"
                         >
                             <line x1="3" y1="12" x2="21" y2="12"></line>
                             <line x1="3" y1="6" x2="21" y2="6"></line>
