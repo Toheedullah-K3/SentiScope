@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Outlet } from "react-router-dom";
 import { Navbar } from "./components/index.js"
 
@@ -14,26 +14,30 @@ function App() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
+  const fetchCurrentUser = useCallback(async () => {
+    async () => {
       try {
         setLoading(true);
-
+  
         const response = await axios.get(`${apiUrl}/api/v1/users/current-user`);
         const {user} = response.data
         const userData = user
         if(userData){
           dispatch(authLogin({userData}));
         }
-
+  
       } catch (error) {
         dispatch(logout());
       }finally{
         setLoading(false);
       }
     }
+  }, [dispatch, apiUrl]);
+
+  
+  useEffect(() => {  
     fetchCurrentUser()
-  }, []);
+  }, [fetchCurrentUser]);
 
   return (
    <>
