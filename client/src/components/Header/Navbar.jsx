@@ -1,4 +1,3 @@
-import React from 'react'
 import { NavLink } from 'react-router-dom'
 import LogoImage from '../../assets/images/logo.png'
 import { Button } from '../index.js'
@@ -7,7 +6,7 @@ import { useSelector } from 'react-redux'
 const Navbar = () => {
 
     const authStatus = useSelector(state => state.auth.status)
-    
+
 
 
     const navItems = [
@@ -62,9 +61,15 @@ const Navbar = () => {
                     </div>
                     <div className='flex justify-end gap-4'>
                         {authStatus && (
-                            <NavLink to='/dashboard'>
-                                <Button className='hidden lg:inline-flex items-center font-extrabold'>Logout</Button>
-                            </NavLink>
+                            <>
+                                <NavLink to='/dashboard'>
+                                    <Button className='hidden lg:inline-flex items-center font-extrabold'>Dashboard</Button>
+                                </NavLink>
+
+                                <NavLink to='/logout'>
+                                    <Button className='hidden lg:inline-flex items-center font-extrabold'>Logout</Button>
+                                </NavLink>
+                            </>
                         )}
                         {!authStatus && (
                             <>

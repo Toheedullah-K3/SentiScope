@@ -1,4 +1,3 @@
-import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
@@ -14,6 +13,7 @@ import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
 import UserProfile from './pages/UserProfile.jsx'
 import Dashboard from './pages/Dashboard.jsx'
+import About from './pages/About.jsx'
 import { AuthLayout } from './components/index.js'
 
 const routes = createRoutesFromElements(
@@ -32,6 +32,14 @@ const routes = createRoutesFromElements(
       element={
         <AuthLayout authentication={false}>
           <Signup />
+        </AuthLayout>
+      }
+    />
+    <Route
+      path="/about-us"
+      element={
+        <AuthLayout authentication={false}>
+          <About />
         </AuthLayout>
       }
     />
