@@ -1,14 +1,7 @@
 import { TrendingUp } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
-
-import { Card, CardContent, CardDescription,CardFooter,CardHeader,CardTitle,} from "@/components/ui/card"
-
-import {
-
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
 
 const chartData = [
@@ -33,7 +26,7 @@ const chartConfig = {
 
 export function Chart() {
   return (
-    <Card>
+    <Card className="w-[350px]">
       <CardHeader>
         <CardTitle>Bar Chart - Multiple</CardTitle>
         <CardDescription>January - June 2024</CardDescription>

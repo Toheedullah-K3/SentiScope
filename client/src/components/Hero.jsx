@@ -1,5 +1,4 @@
-import React from 'react'
-import { Button, Input } from './index.js'
+import { Button } from './index.js'
 
 const Hero = () => {
     return (
