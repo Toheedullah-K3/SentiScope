@@ -1,38 +1,27 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import LogoImage from '../../assets/images/logo.png'
 import { Button, LogoutBtn } from '../index.js'
 import { useSelector } from 'react-redux'
 
 const Navbar = () => {
-
+    const location = useLocation()
     const authStatus = useSelector(state => state.auth.status)
 
 
 
     const navItems = [
-        {
-            name: 'Home',
-            slug: '/',
-            active: true
-        },
-        {
-            name: 'About',
-            slug: '/about-us',
-            active: true
-        },
-        {
-            name: 'Trending',
-            slug: '/signup',
-            active: true
-        },
-        {
-            name: 'Highlights',
-            slug: '/user-profile',
-            active: true
-        }
+        { name: 'Home', slug: '/', active: true },
+        { name: 'About', slug: '/about-us', active: true },
+        { name: 'Trending', slug: '/signup', active: true },
+        { name: 'Highlights', slug: '/user-profile', active: true }
     ]
+    
     return (
-        <nav className='py-4 lg:py-8'>
+        <>
+            {location.pathname === "/dashboard" ? (
+                <h1>Sidebar </h1>
+            ) : (
+                <nav className='py-4 lg:py-8'>
             <div className="container max-w-5xl mx-auto">
                 <div className="grid grid-cols-2 lg:grid-cols-3 border border-white/15 rounded-full p-2 px-4 md:pr-2 items-center">
                     <div>
@@ -102,6 +91,8 @@ const Navbar = () => {
                 </div>
             </div>
         </nav>
+            )}
+        </>
     )
 }
 
