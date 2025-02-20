@@ -6,14 +6,13 @@ import {
   Package,
   UserCircle,
   BarChart3,
-  LayoutDashboard,
   Settings
 } from "lucide-react"
 
 const Dashboard = () => {
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <Sidebar>
         <SidebarItem icon={<BarChart3 size={20}/> } text="Statistics" active />
         <SidebarItem icon={<UserCircle size={20}/> } text="Users" />

@@ -5,17 +5,17 @@ export const SidebarContext = createContext()
 
 const Sidebar = ({ children }) => {
     const [expanded, setExpanded] = useState(true)
+
     return (
         <aside className="h-screen">
-            <nav className="h-full flex flex-col bg-white border-r shadow-sm">
+            <nav className="h-full flex flex-col border-r shadow-sm">
                 <div className="p-4 pb-2 flex justify-between items-center">
-                    <img
-                        src="https://img.logoipsum.com/243.svg"
-                        className={`overflow-hidden transition-all ${expanded ? "w-32" : "w-0"
-                            }`} alt="" />
+
+                    <h1 className={`font-extrabold text-3xl overflow-hidden transition-all ${expanded ? "w-52" : "w-0"
+                        }`}>SentiScope</h1>
                     <button
                         onClick={() => setExpanded(curr => !curr)}
-                        className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100">
+                        className="p-1.5 rounded-lg hover:bg-lime-400 hover:text-gray-800">
                         {expanded ? <ChevronFirst /> : <ChevronLast />}
                     </button>
                 </div>
@@ -23,7 +23,7 @@ const Sidebar = ({ children }) => {
                 <SidebarContext.Provider value={{ expanded, setExpanded }}>
                     <ul className="flex-1 px-3"> {children} </ul>
                 </SidebarContext.Provider>
-                
+
 
                 <div className="border-t flex p-3">
                     <img
@@ -33,9 +33,9 @@ const Sidebar = ({ children }) => {
                     />
                     <div className={`flex justify-between items-center  overflow-hidden transition-all ${expanded ? "w-52" : "w-0"
                         }`}>
-                        <div className="leading-4">
+                        <div className="leading-4 pl-3">
                             <h4 className="font-semibold">John Doe</h4>
-                            <span className="text-xs text-gray-600"></span>
+                            <span className="text-xs text-gray-400">johndoe@gmail.com</span>
                         </div>
                         <MoreVertical size={20} />
                     </div>
