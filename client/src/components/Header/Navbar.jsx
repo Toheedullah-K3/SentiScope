@@ -19,7 +19,7 @@ const Navbar = () => {
     return (
         <>
             {location.pathname === "/dashboard" ? (
-                <h1>Sidebar </h1>
+                null
             ) : (
                 <nav className='py-4 lg:py-8'>
             <div className="container max-w-5xl mx-auto">
