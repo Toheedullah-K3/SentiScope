@@ -58,7 +58,9 @@ const routes = createRoutesFromElements(
           <Dashboard />
         </AuthLayout>
       }
-    />
+    >
+    
+    </Route>
   </Route>
 )
 

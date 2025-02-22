@@ -5,12 +5,15 @@ const SidebarItem = ({
     icon,
     text,
     active,
-    alert
+    alert,
+    onClick
 }) => {
     const { expanded } = useContext(SidebarContext)
 
     return (
-        <li className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group
+        <li 
+            onClick={onClick}
+            className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group
             ${active ? 'bg-gradient-to-tr from-lime-400 to-lime-500 text-gray-800' : 'text-gray-300 hover:bg-lime-400 hover:text-gray-800'}`
         }>
             {icon}
