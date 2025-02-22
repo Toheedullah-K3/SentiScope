@@ -22,34 +22,38 @@ const Dashboard = () => {
       <Sidebar>
         <SidebarItem 
           icon={<BarChart3 size={20}/> } 
-          text="Statistics" 
-          active= {selected === "Statistics"} 
+          text="Search & Analyze" 
+          hoverText= "Analyze"
+          active= {selected === "Search & Analyze"} 
           onClick={()=> {
             navigate('') 
-            setSelected("Statistics")
+            setSelected("Search & Analyze")
           }} 
         />
         <SidebarItem 
           icon={<UserCircle size={20}/> } 
-          text="Users"
-          active= {selected === "Users"} 
+          text="Compare Trends"
+          hoverText= "Compare"
+          active= {selected === "Compare Trends"} 
           onClick={()=> {
             navigate('') 
-            setSelected("Users")
+            setSelected("Compare Trends")
           }}
         />
         <SidebarItem 
           icon={<Boxes size={20}/> } 
-          text="Product"  
-          active= {selected === "Product"} 
+          text="History & Saved Analysis"  
+          hoverText= "History"
+          active= {selected === "History & Saved Analysis"} 
           onClick={()=> {
             navigate('') 
-            setSelected("Product")
+            setSelected("History & Saved Analysis")
           }}
         />
         <SidebarItem 
           icon={<Package size={20}/> } 
           text="Sentiments" alert
+          hoverText= "Sentiments"
           active= {selected === "Sentiments"} 
           onClick={()=> {
             navigate('') 
@@ -59,6 +63,7 @@ const Dashboard = () => {
         <SidebarItem 
           icon={<Receipt size={20}/> } 
           text="Cluster" 
+          hoverText= "Cluster"
           active= {selected === "Cluster"} 
           onClick={()=> {
             navigate('') 
@@ -69,6 +74,7 @@ const Dashboard = () => {
         <SidebarItem 
           icon={<Settings size={20}/> } 
           text="Settings" 
+          hoverText= "Settings"
           active= {selected === "Settings"} 
           onClick={()=> {
             navigate('') 
@@ -77,6 +83,7 @@ const Dashboard = () => {
         <SidebarItem 
           icon={<LifeBuoy size={20}/> } 
           text="Help" 
+          hoverText= "Help"
           active= {selected === "Help"} 
           onClick={()=> {
             navigate('') 
