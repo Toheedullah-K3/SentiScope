@@ -18,7 +18,7 @@ const Navbar = () => {
     
     return (
         <>
-            {location.pathname === "/dashboard" ? (
+            {location.pathname.startsWith('/dashboard') ? (
                 null
             ) : (
                 <nav className='py-4 lg:py-8'>

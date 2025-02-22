@@ -16,6 +16,9 @@ import Dashboard from './pages/Dashboard.jsx'
 import About from './pages/About.jsx'
 import { AuthLayout } from './components/index.js'
 
+// Dashboard Pages
+import SearchAnalyze from './pages/DasboardNestedPages/SearchAnalyze.jsx'
+
 const routes = createRoutesFromElements(
   <Route element={<App />}>
     <Route path="/" element={<Home />} />
@@ -59,7 +62,14 @@ const routes = createRoutesFromElements(
         </AuthLayout>
       }
     >
-    
+      <Route
+        path='sentiment-analysis'
+        element={
+          <AuthLayout authentication>
+            <SearchAnalyze />
+          </AuthLayout>
+        }
+      />
     </Route>
   </Route>
 )

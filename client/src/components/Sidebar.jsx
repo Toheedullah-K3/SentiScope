@@ -1,48 +1,97 @@
-import { createContext, useState } from "react"
-import { ChevronFirst, ChevronLast, MoreVertical } from "lucide-react"
+import { SidebarItemParent, SidebarItem } from "@/components/index"
+import { useNavigate } from "react-router-dom"
 
-export const SidebarContext = createContext()
+import {
+  LifeBuoy,
+  Receipt,
+  Boxes,
+  Package,
+  UserCircle,
+  BarChart3,
+  Settings
+} from "lucide-react"
+import { useState } from "react"
 
-const Sidebar = ({ children }) => {
-    const [expanded, setExpanded] = useState(true)
+const Dashboard = () => {
+  const [selected, setSelected] = useState("Statistics")
+  const navigate = useNavigate()
 
-    return (
-        <aside className="h-screen">
-            <nav className="h-full flex flex-col border-r shadow-sm">
-                <div className="p-4 pb-2 flex justify-between items-center">
+  return (
+    <div className="flex h-screen">
+      <SidebarItemParent>
+        <SidebarItem 
+          icon={<BarChart3 size={20}/> } 
+          text="Search & Analyze" 
+          hoverText= "Analyze"
+          active= {selected === "Search & Analyze"} 
+          onClick={()=> {
+            navigate('/dashboard/sentiment-analysis') 
+            setSelected("Search & Analyze")
+          }} 
+        />
+        <SidebarItem 
+          icon={<UserCircle size={20}/> } 
+          text="Compare Trends"
+          hoverText= "Compare"
+          active= {selected === "Compare Trends"} 
+          onClick={()=> {
+            navigate('') 
+            setSelected("Compare Trends")
+          }}
+        />
+        <SidebarItem 
+          icon={<Boxes size={20}/> } 
+          text="History & Saved Analysis"  
+          hoverText= "History"
+          active= {selected === "History & Saved Analysis"} 
+          onClick={()=> {
+            navigate('') 
+            setSelected("History & Saved Analysis")
+          }}
+        />
+        <SidebarItem 
+          icon={<Package size={20}/> } 
+          text="Sentiments" alert
+          hoverText= "Sentiments"
+          active= {selected === "Sentiments"} 
+          onClick={()=> {
+            navigate('') 
+            setSelected("Sentiments")
+          }}
+        />
+        <SidebarItem 
+          icon={<Receipt size={20}/> } 
+          text="Cluster" 
+          hoverText= "Cluster"
+          active= {selected === "Cluster"} 
+          onClick={()=> {
+            navigate('') 
+            setSelected("Cluster")
+          }}
+        />
+        <hr className="my-3"/>
+        <SidebarItem 
+          icon={<Settings size={20}/> } 
+          text="Settings" 
+          hoverText= "Settings"
+          active= {selected === "Settings"} 
+          onClick={()=> {
+            navigate('') 
+            setSelected("Settings")}}
+        />
+        <SidebarItem 
+          icon={<LifeBuoy size={20}/> } 
+          text="Help" 
+          hoverText= "Help"
+          active= {selected === "Help"} 
+          onClick={()=> {
+            navigate('') 
+            setSelected("Help")
+          }}
+        />
+      </SidebarItemParent>
+    </div>
+  )
+} 
 
-                    <h1 className={`font-extrabold text-3xl overflow-hidden transition-all ${expanded ? "w-52" : "w-0"
-                        }`}>SentiScope</h1>
-                    <button
-                        onClick={() => setExpanded(curr => !curr)}
-                        className="p-1.5 rounded-lg hover:bg-lime-400 hover:text-gray-800">
-                        {expanded ? <ChevronFirst /> : <ChevronLast />}
-                    </button>
-                </div>
-
-                <SidebarContext.Provider value={{ expanded, setExpanded }}>
-                    <ul className="flex-1 px-3"> {children} </ul>
-                </SidebarContext.Provider>
-
-
-                <div className="border-t flex p-3">
-                    <img
-                        src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
-                        alt=""
-                        className="w-10 h-10 rounded-md"
-                    />
-                    <div className={`flex justify-between items-center  overflow-hidden transition-all ${expanded ? "w-52" : "w-0"
-                        }`}>
-                        <div className="leading-4 pl-3">
-                            <h4 className="font-semibold">John Doe</h4>
-                            <span className="text-xs text-gray-400">johndoe@gmail.com</span>
-                        </div>
-                        <MoreVertical size={20} />
-                    </div>
-                </div>
-            </nav>
-        </aside>
-    )
-}
-
-export default Sidebar
+export default Dashboard

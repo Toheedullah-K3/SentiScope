@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { SidebarContext } from "./Sidebar.jsx"
+import { SidebarContext } from "./SidebarItemParent.jsx"
 
 const SidebarItem = ({
     icon,

@@ -4,8 +4,9 @@ import Hero from "./Hero.jsx";
 import Input from "./Input.jsx";
 import AuthLayout from "./AuthLayout.jsx";
 import LogoutBtn from "./Header/LogoutBtn.jsx";
-import Sidebar from "./Sidebar.jsx";
+import SidebarItemParent from "./SidebarItemParent.jsx";
 import SidebarItem from "./SidebarItem.jsx";
+import Sidebar from "./Sidebar.jsx"
 export { 
     Navbar,
     Button,
@@ -13,6 +14,7 @@ export {
     Input,
     AuthLayout,
     LogoutBtn,
-    Sidebar,
-    SidebarItem
+    SidebarItemParent,
+    SidebarItem,
+    Sidebar
 };
