@@ -8,7 +8,8 @@ const Input = React.forwardRef(function Input({
     ...props
 }, ref) {
     return (
-        <div className='flex items-center border-b-2 border-gray-300 py-2 my-4'>
+        // <div className='flex items-center border-b-2 border-gray-300 py-2 my-4'>
+        <>
             <i className={`fas fa-${icon} text-lime-400 mr-2`}></i>
             <input
                 type={type}
@@ -16,9 +17,10 @@ const Input = React.forwardRef(function Input({
                 className={`w-full bg-transparent outline-none text-white text-lg pl-2 ${className}`}
                 ref={ref}
                 {...props}
-                
+
             />
-        </div>
+        </>
+        // </div>
     )
 })
 
