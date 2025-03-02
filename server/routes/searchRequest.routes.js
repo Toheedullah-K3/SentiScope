@@ -4,6 +4,6 @@ import { getSearchRequest } from "../controllers/searchRequest.controller.js";
 
 const router = Router()
 
-router.route('/getSearchRequest').get(getSearchRequest)
+router.route('/getSearchRequest').post(getSearchRequest)
 
 export default router

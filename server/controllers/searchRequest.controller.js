@@ -1,10 +1,12 @@
 
 
 const getSearchRequest = (req, res) => {
+    const {search} = req.body
     return (
-        res.json("Hello Search Request Here")
+        res.json(search)
     )
 }
+
 
 export  {
     getSearchRequest
