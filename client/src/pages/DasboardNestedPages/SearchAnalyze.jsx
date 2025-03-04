@@ -38,7 +38,7 @@ const SearchAnalyze = () => {
       </form>
  
 
-    <h1>{name}</h1>
+    <h1>{name.message}</h1>
     </>
   )
 }
