@@ -14,8 +14,9 @@ const SearchAnalyze = () => {
         const response = await axios.post(`${apiUrl}/api/v1/search/getSearchRequest`, data, {
           withCredentials: true
         })
-        
-        setName(response.data)
+        console.log(response.data[3].tweet_text)
+        const testing = response.data[3].tweet_text
+        setName(testing)
     } catch (error) {
       console.log(error)
     }
@@ -38,7 +39,7 @@ const SearchAnalyze = () => {
       </form>
  
 
-    <h1>{name.message}</h1>
+    <h1>{name}</h1>
     </>
   )
 }
