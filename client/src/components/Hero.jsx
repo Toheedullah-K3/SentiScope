@@ -9,7 +9,7 @@ const Hero = () => {
                         🔍 Real-Time Social Sentiment Analysis
                     </div>
                 </div>
-                <h1 className='text-6xl md:text-7xl lg:text-8xl font-medium text-center mt-6'>SentiScope <br /> AI-Powered Insights </h1>
+                <h1 className='text-6xl md:text-7xl lg:text-8xl font-medium text-center mt-6'>AZ Marketing <br /> Your Earning Platform </h1>
                 <p className='text-center text-lg text-white/50 mt-8 max-w-2xl mx-auto'>
                     Uncover real-time emotions behind trends, brands, and topics on Reddit, Twitter, and Facebook. Turn social chatter into powerful insights with AI-driven sentiment analysis!
                 </p>
