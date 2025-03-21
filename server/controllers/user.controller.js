@@ -72,7 +72,7 @@ const loginUser = async (req, res) => {
     // generate access and refresh token
     // remove password & refreshToken from response
     // send cookies 
-    // send success response
+    // send  success response
 
     const { email, password } = req.body;
 
