@@ -7,7 +7,7 @@ const searchRequestSchema = new Schema(
             lowercase: true,
             required: true,
             trim: true
-        },
+        }, 
         platform:{
             type: [String],
             enum: ["Reddit", "Twitter", "Facebook"],

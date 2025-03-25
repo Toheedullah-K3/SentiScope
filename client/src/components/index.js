@@ -7,6 +7,8 @@ import LogoutBtn from "./Header/LogoutBtn.jsx";
 import SidebarItemParent from "./SidebarItemParent.jsx";
 import SidebarItem from "./SidebarItem.jsx";
 import Sidebar from "./Sidebar.jsx"
+import Radio from "./Radio.jsx";
+
 export { 
     Navbar,
     Button,
@@ -16,5 +18,6 @@ export {
     LogoutBtn,
     SidebarItemParent,
     SidebarItem,
-    Sidebar
+    Sidebar,
+    Radio
 };

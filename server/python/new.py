@@ -1,30 +1,26 @@
 from flask import Flask, request, jsonify
-import pandas as pd
 
 app = Flask(__name__)
-
-# Load CSV only once (Improve performance)
-CSV_FILE = r"D:\SentiScope\server\python\data\data.csv"
-
-df = pd.read_csv(CSV_FILE, encoding="ISO-8859-1", header=None, usecols=[0, 4, 5], names=["sentiment", "username", "tweet_text"])
 
 @app.route("/", methods=["POST"])
 def search_tweets():
     try:
         data = request.get_json()
-        search_query = data.get("search", "").lower()
+        if not data:
+            return jsonify({"error": "Invalid JSON or empty request body"}), 400
 
-        if not search_query:
-            return jsonify({"error": "Search query is required"}), 400
+        # Extract values safely
+        search = data.get("search")
+        platform = data.get("platform")
+        model = data.get("model")
 
-        # Use pandas filtering for fast searching
-        results = df[df["tweet_text"].str.contains(search_query, case=False, na=False)]
+        if not all([search, platform, model]):
+            return jsonify({"error": "Missing required fields"}), 400
 
-        # Convert to JSON and return only top 20 results (faster response)
-        return jsonify(results.head(20).to_dict(orient="records"))
+        return jsonify({"search": search, "platform": platform, "model": model})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True)  # Remove debug=True for production
