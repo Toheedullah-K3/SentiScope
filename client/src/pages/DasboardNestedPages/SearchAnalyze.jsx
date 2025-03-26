@@ -46,17 +46,17 @@ const SearchAnalyze = () => {
           <Radio
             {...register("platform")}
             label="Facebook"
-            value="Facebook"
+            value="facebook"
           />
           <Radio
             {...register("platform")}
             label="Twitter"
-            value="Twitter"
+            value="twitter"
           />
           <Radio
             {...register("platform")}
             label="Reddit"
-            value="Reddit"
+            value="reddit"
           />
         </div>
 
@@ -67,21 +67,22 @@ const SearchAnalyze = () => {
           <Radio
             {...register("model")}
             label="TextBlob"
-            value="TextBlob"
+            value="textblob"
           />
           <Radio
             {...register("model")}
             label="Vader"
-            value="Vader"
+            value="vader"
           />
           <Radio
             {...register("model")}
             label="GenAI"
-            value="GenAI"
+            value="genai"
           />
         </div>
       </form>
 
+      
 
 
       <p>Platform --&gt; {watch("platform")}</p>
