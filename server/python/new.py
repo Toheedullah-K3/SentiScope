@@ -85,10 +85,9 @@ def fetch_reddit_posts(search_query):
         # Search across subreddits
         posts = []
         for submission in reddit.subreddit('all').search(search_query, limit=10):
-            # Collect both submission title and top comments
+            # Collects submission title 
             posts.append(submission.title)
-            # submission.comments.replace_more(limit=0)
-            # posts.extend([comment.body for comment in submission.comments.list()[:10]])
+            
 
         return posts
 
