@@ -44,19 +44,19 @@ const SearchAnalyze = () => {
         <div className="flex justify-center items-center gap-4 mt-4">
           <p className="text-white text-sm">Select Platform</p>
           <Radio
-            {...register("platform")}
-            label="Facebook"
-            value="facebook"
-          />
-          <Radio
-            {...register("platform")}
-            label="Twitter"
-            value="twitter"
+            {...register("platform")} 
+            label="GNews Api"
+            value="gnews"
           />
           <Radio
             {...register("platform")}
             label="Reddit"
             value="reddit"
+          />
+          <Radio
+            {...register("platform")}
+            label="Twitter"
+            value="twitter"
           />
         </div>
 

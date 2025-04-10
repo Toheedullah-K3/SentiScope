@@ -5,9 +5,9 @@ import requests
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import openai
-import tweepy
+# import tweepy
 import praw
-import facebook
+# import facebook
 from dotenv import load_dotenv
 
 # Configure logging
@@ -20,57 +20,103 @@ app = Flask(__name__)
 load_dotenv()
 
 # Twitter API Integration
-def fetch_twitter_posts(search_query):
-    """
-    Fetch tweets using Twitter API v2
-    """
-    try:
-        # Twitter API credentials
-        client = tweepy.Client(
-            bearer_token=os.getenv('TWITTER_BEARER_TOKEN'),
-            consumer_key=os.getenv('TWITTER_API_KEY'),
-            consumer_secret=os.getenv('TWITTER_API_SECRET'),
-            access_token=os.getenv('TWITTER_ACCESS_TOKEN'),
-            access_token_secret=os.getenv('TWITTER_ACCESS_TOKEN_SECRET')
-        )
+# def fetch_twitter_posts(search_query): 
+#     """
+#     Fetch tweets using Twitter API v2
+#     """
+#     try:
+#         # Twitter API credentials
+#         client = tweepy.Client(
+#             bearer_token=os.getenv('TWITTER_BEARER_TOKEN'),
+#             consumer_key=os.getenv('TWITTER_API_KEY'),
+#             consumer_secret=os.getenv('TWITTER_API_SECRET'),
+#             access_token=os.getenv('TWITTER_ACCESS_TOKEN'),
+#             access_token_secret=os.getenv('TWITTER_ACCESS_TOKEN_SECRET')
+#         )
 
-        # Search tweets
-        tweets = client.search_recent_tweets(
-            query=search_query, 
-            max_results=100,
-            tweet_fields=['text']
-        )
+#         # Search tweets
+#         tweets = client.search_recent_tweets(
+#             query=search_query, 
+#             max_results=100,
+#             tweet_fields=['text']
+#         )
 
-        # Extract tweet texts
-        return [tweet.text for tweet in tweets.data] if tweets.data else []
+#         # Extract tweet texts
+#         return [tweet.text for tweet in tweets.data] if tweets.data else []
 
-    except Exception as e:
-        logger.error(f"Twitter API Error: {e}")
-        return []
+#     except Exception as e:
+#         logger.error(f"Twitter API Error: {e}")
+#         return []
 
 # # Facebook API Integration
-def fetch_facebook_posts(search_query):
+# def fetch_facebook_posts(search_query):
+#     """
+#     Fetch posts using Facebook Graph API
+#     """
+#     try:
+#         graph = facebook.GraphAPI(
+#             access_token=os.getenv('FACEBOOK_ACCESS_TOKEN'),
+#             version="3.1"
+#         )
+
+#         # Search posts (note: Facebook's search is limited)
+#         search_results = graph.search(
+#             type='post', 
+#             q=search_query, 
+#             limit=100
+#         )
+
+#         # Extract post messages
+#         return [post.get('message', '') for post in search_results if 'message' in post]
+
+#     except Exception as e:
+#         logger.error(f"Facebook API Error: {e}")
+#         return []
+
+# GNews API Integration
+def fetch_gnews_posts(search_query):
     """
-    Fetch posts using Facebook Graph API
+    Fetch news articles using GNews API with pagination.
     """
     try:
-        graph = facebook.GraphAPI(
-            access_token=os.getenv('FACEBOOK_ACCESS_TOKEN'),
-            version="3.1"
-        )
+        gnews_api_key = os.getenv('GNEWS_API_KEY')
+        if not gnews_api_key:
+            logger.error("GNEWS_API_KEY is not set.")
+            return []
 
-        # Search posts (note: Facebook's search is limited)
-        search_results = graph.search(
-            type='post', 
-            q=search_query, 
-            limit=100
-        )
+        url = "https://gnews.io/api/v4/search"
+        params = {
+            'q': search_query,
+            'token': gnews_api_key,
+            'lang': 'en',
+            'max': 100,  # Maximum posts per request
+        }
 
-        # Extract post messages
-        return [post.get('message', '') for post in search_results if 'message' in post]
+        # Initialize a list to store all fetched posts
+        all_articles = []
+        page = 1
+        while True:
+            params['page'] = page
+            response = requests.get(url, params=params)
+            response.raise_for_status()
+
+            articles = response.json().get('articles', [])
+            if not articles:
+                break  # Stop if there are no more articles
+
+            all_articles.extend(articles)
+
+            # Optional: stop after a certain number of total articles
+            if len(all_articles) >= 100:  # Limit to a maximum of 300 articles
+                break
+
+            page += 1  # Increment to fetch the next page
+
+        # Format and return the articles as you wish
+        return [article['title'] + " - " + article.get('description', '') for article in all_articles]
 
     except Exception as e:
-        logger.error(f"Facebook API Error: {e}")
+        logger.error(f"GNews API Error: {e}")
         return []
 
 # Reddit API Integration
@@ -185,7 +231,7 @@ def analyze_sentiment():
             return jsonify({"error": "Missing required fields"}), 400
 
         # Validate platform and model
-        if platform not in ['twitter', 'facebook', 'reddit']:
+        if platform not in ['twitter', 'gnews', 'reddit']:
             return jsonify({"error": "Invalid platform"}), 400
         
         if model not in ['vader', 'textblob', 'genai']:
@@ -193,9 +239,10 @@ def analyze_sentiment():
 
         # Fetch social media posts based on platform
         if platform == 'twitter':
-            posts = fetch_twitter_posts(search_query)
-        elif platform == 'facebook':
-            posts = fetch_facebook_posts(search_query)
+            return 0
+            # posts = fetch_twitter_posts(search_query)
+        elif platform == 'gnews':
+            posts = fetch_gnews_posts(search_query)
         elif platform == 'reddit':
             posts = fetch_reddit_posts(search_query)
         else:
@@ -257,5 +304,5 @@ if __name__ == "__main__":
     # Validate environment before starting
     setup_environment()
     
-    # Run the Flask app
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    # Run the Flask ap
+    app.run(host='0.0.0.0', port=5000, debug=True)

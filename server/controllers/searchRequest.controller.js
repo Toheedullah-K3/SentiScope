@@ -14,5 +14,5 @@ const getSearchRequest = async (req, res) => {
         res.status(500).json({ error: "Failed to connect to Python server" });
     }
 };
-
+ 
 export { getSearchRequest };
