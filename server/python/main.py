@@ -5,9 +5,8 @@ import requests
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import openai
-# import tweepy
+
 import praw
-# import facebook
 from dotenv import load_dotenv
 
 # Configure logging
@@ -16,62 +15,9 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-# Load environment variables
+
 load_dotenv()
 
-# Twitter API Integration
-# def fetch_twitter_posts(search_query): 
-#     """
-#     Fetch tweets using Twitter API v2
-#     """
-#     try:
-#         # Twitter API credentials
-#         client = tweepy.Client(
-#             bearer_token=os.getenv('TWITTER_BEARER_TOKEN'),
-#             consumer_key=os.getenv('TWITTER_API_KEY'),
-#             consumer_secret=os.getenv('TWITTER_API_SECRET'),
-#             access_token=os.getenv('TWITTER_ACCESS_TOKEN'),
-#             access_token_secret=os.getenv('TWITTER_ACCESS_TOKEN_SECRET')
-#         )
-
-#         # Search tweets
-#         tweets = client.search_recent_tweets(
-#             query=search_query, 
-#             max_results=100,
-#             tweet_fields=['text']
-#         )
-
-#         # Extract tweet texts
-#         return [tweet.text for tweet in tweets.data] if tweets.data else []
-
-#     except Exception as e:
-#         logger.error(f"Twitter API Error: {e}")
-#         return []
-
-# # Facebook API Integration
-# def fetch_facebook_posts(search_query):
-#     """
-#     Fetch posts using Facebook Graph API
-#     """
-#     try:
-#         graph = facebook.GraphAPI(
-#             access_token=os.getenv('FACEBOOK_ACCESS_TOKEN'),
-#             version="3.1"
-#         )
-
-#         # Search posts (note: Facebook's search is limited)
-#         search_results = graph.search(
-#             type='post', 
-#             q=search_query, 
-#             limit=100
-#         )
-
-#         # Extract post messages
-#         return [post.get('message', '') for post in search_results if 'message' in post]
-
-#     except Exception as e:
-#         logger.error(f"Facebook API Error: {e}")
-#         return []
 
 # GNews API Integration
 def fetch_gnews_posts(search_query):
@@ -130,7 +76,7 @@ def fetch_reddit_posts(search_query):
 
         # Search across subreddits
         posts = []
-        for submission in reddit.subreddit('all').search(search_query, limit=10):
+        for submission in reddit.subreddit('all').search(search_query, limit=30):
             # Collects submission title 
             posts.append(submission.title)
             
@@ -141,7 +87,6 @@ def fetch_reddit_posts(search_query):
         logger.error(f"Reddit API Error: {e}")
         return []
 
-# Existing Sentiment Analysis Functions (from previous implementation)
 def get_textblob_sentiment(text):
     """
     Analyze sentiment using TextBlob
@@ -199,32 +144,11 @@ def analyze_sentiment():
         if not data:
             return jsonify({"error": "Invalid JSON or empty request body"}), 400
 
-        # Extract values safely
+        # Extract values 
         search_query = data.get("search")
         platform = data.get("platform")
         model = data.get("model")
 
-
-        # posts = fetch_reddit_posts(search_query)
-        # sentiment_results = []
-        # for post in posts:
-        #     sentiment_score = get_vader_sentiment(post)
-        #     sentiment_results.append({
-        #         'text': post,
-        #         'sentiment_score': sentiment_score
-        #     })
-        
-        # total_sentiment = sum(result['sentiment_score'] for result in sentiment_results)
-        # avg_sentiment = total_sentiment / len(sentiment_results) if sentiment_results else 0
-         
-        # return jsonify({
-        #     'search_query': search_query,
-        #     'platform': platform,
-        #     'model': model,
-        #     'total_posts': len(sentiment_results),
-        #     'average_sentiment': avg_sentiment,
-        #     'sentiment_details': sentiment_results
-        # })
 
         # Validate inputs
         if not all([search_query, platform, model]):
@@ -238,29 +162,27 @@ def analyze_sentiment():
             return jsonify({"error": "Invalid sentiment analysis model"}), 400
 
         # Fetch social media posts based on platform
-        if platform == 'twitter':
-            return 0
-            # posts = fetch_twitter_posts(search_query)
-        elif platform == 'gnews':
+        if platform == 'gnews':
             posts = fetch_gnews_posts(search_query)
         elif platform == 'reddit':
             posts = fetch_reddit_posts(search_query)
         else:
             posts = []
 
+        # Check which model is selected for 
+        if model == 'textblob':
+            sentiment_func = get_textblob_sentiment
+        elif model == 'vader':
+            sentiment_func = get_vader_sentiment
+        elif model == 'genai':
+            sentiment_func = get_genai_sentiment
+
         # Analyze sentiment for each post
         sentiment_results = []
         for post in posts:
-            # Select sentiment analysis model
-            if model == 'textblob':
-                sentiment_score = get_textblob_sentiment(post)
-            elif model == 'vader':
-                sentiment_score = get_vader_sentiment(post)
-            elif model == 'genai':
-                sentiment_score = get_genai_sentiment(post)
-            
+            sentiment_score = sentiment_func(post)
             sentiment_results.append({
-                'text': post,
+                'description': post,
                 'sentiment_score': sentiment_score
             })
 

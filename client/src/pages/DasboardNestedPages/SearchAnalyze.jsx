@@ -15,8 +15,24 @@ const SearchAnalyze = () => {
       const response = await axios.post(`${apiUrl}/api/v1/search/getSearchRequest`, data, {
         withCredentials: true
       })
-      console.log(response.data)
-      setOption(response.data)
+
+      const { total_posts, average_sentiment, sentiment_details } = response.data
+      console.log("Python Server Response:", response.data)
+      console.log("Total Posts:", total_posts)
+      console.log("Average Sentiment:", average_sentiment)
+      console.log("Sentiment Details:", sentiment_details)
+
+      setOption({
+        search: data.search,
+        platform: data.platform,
+        model: data.model,
+        total_posts,
+        average_sentiment,
+        sentiment_details
+      })
+
+
+
       
     } catch (error) {
       console.log(error)
@@ -96,6 +112,19 @@ const SearchAnalyze = () => {
         <p>Search Query: {option.search}</p>
         <p>Platform: {option.platform}</p>
         <p>Model: {option.model}</p>
+        <p>Total Posts: {option.total_posts}</p>
+        <p>Average Sentiment: {option.average_sentiment}</p>
+        {console.log("Sentiment Details:", option.sentiment_details)}
+        {/* Map func on sentiment_details */}
+        <div>
+          {option.sentiment_details && option.sentiment_details.map((post, key) => (
+            <div key={key}>
+              <p>{post.description}</p>
+              <p>{post.sentiment_score}</p>
+              <p>--------------------------------\n</p>
+            </div>
+          ))}
+        </div>
       </div>
     </>
   )
