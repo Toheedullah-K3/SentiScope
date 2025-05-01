@@ -130,4 +130,4 @@ const SearchAnalyze = () => {
   )
 }
 
-export default SearchAnalyze 
+export default SearchAnalyze
