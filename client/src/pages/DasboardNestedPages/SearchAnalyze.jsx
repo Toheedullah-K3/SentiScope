@@ -3,6 +3,13 @@ import axios from "axios"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { Radio } from "@/components"
+import { StatCard } from "@/components"
+import { FileText, Smile, Globe, Brain } from 'lucide-react';
+import { motion } from "framer-motion"
+
+// shadCN components
+import { Card } from "@/components/ui/card"
+
 
 const SearchAnalyze = () => {
   const [option, setOption] = useState([])
@@ -99,13 +106,43 @@ const SearchAnalyze = () => {
       </form>
 
       
+      <br />
+      <br />
 
-
-      <p>Platform --&gt; {watch("platform")}</p>
-      <p>Model --&gt; {watch("model")}</p>
+      {/* <Chart /> */}
+      <motion.div
+					className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8'
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 1 }}
+				>
+					<StatCard 
+            name='Total Posts' 
+            icon={FileText} 
+            value={option.total_posts ? option.total_posts : 0}
+            color='#6366F1' 
+          />
+					<StatCard 
+            name='Sentiment Score' 
+            icon={Smile} 
+            value={option.average_sentiment ? option.average_sentiment : 0}
+            color='#8B5CF6' 
+          />
+					<StatCard 
+            name='Platform' 
+            icon={Globe} 
+            value={watch("platform")?.charAt(0).toUpperCase() + watch("platform")?.slice(1)}
+            color='#EC4899' 
+          />
+					<StatCard 
+            name='Model' 
+            icon={Brain} 
+            value={watch("model")?.charAt(0).toUpperCase() + watch("model")?.slice(1)}
+            color='#10B981' 
+          />
+				</motion.div>
       
-      <br />
-      <br />
+
 
       <div className="flex justify-center items-center flex-col gap-4 text-white border border-white/15 rounded-lg p-4 text-3xl">
         <h1>Results</h1>

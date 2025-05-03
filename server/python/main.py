@@ -101,7 +101,8 @@ def get_vader_sentiment(text):
     Returns a compound sentiment score between -1 and 1
     """
     analyzer = SentimentIntensityAnalyzer()
-    return analyzer.polarity_scores(text)['compound']
+    rounded_score = round((analyzer.polarity_scores(text)['compound'] + 1) / 2, 2)  # Normalize to [0, 1]
+    return  rounded_score
 
 def get_genai_sentiment(text):
     """
@@ -195,7 +196,7 @@ def analyze_sentiment():
             'platform': platform,
             'model': model,
             'total_posts': len(sentiment_results),
-            'average_sentiment': avg_sentiment,
+            'average_sentiment': round(avg_sentiment, 2),
             'sentiment_details': sentiment_results
         })
 

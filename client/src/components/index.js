@@ -8,6 +8,8 @@ import SidebarItemParent from "./SidebarItemParent.jsx";
 import SidebarItem from "./SidebarItem.jsx";
 import Sidebar from "./Sidebar.jsx"
 import Radio from "./Radio.jsx";
+import StatCard from "./StatCard.jsx";
+
 
 export { 
     Navbar,
@@ -19,5 +21,8 @@ export {
     SidebarItemParent,
     SidebarItem,
     Sidebar,
-    Radio
+    Radio,
+    StatCard
 };
+
+
