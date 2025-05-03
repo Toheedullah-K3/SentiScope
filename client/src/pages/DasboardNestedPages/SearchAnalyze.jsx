@@ -29,7 +29,8 @@ const SearchAnalyze = () => {
       console.log("Average Sentiment:", average_sentiment)
       console.log("Sentiment Details:", sentiment_details)
 
-      setOption({
+
+      setOption({ 
         search: data.search,
         platform: data.platform,
         model: data.model,
@@ -158,7 +159,8 @@ const SearchAnalyze = () => {
             <div key={key}>
               <p>{post.description}</p>
               <p>{post.sentiment_score}</p>
-              <p>--------------------------------\n</p>
+              <p>{post.date}</p>
+              <p>--------------------------------</p>
             </div>
           ))}
         </div>

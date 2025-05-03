@@ -5,6 +5,7 @@ import requests
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import openai
+from datetime import datetime
 
 import praw
 from dotenv import load_dotenv
@@ -78,7 +79,11 @@ def fetch_reddit_posts(search_query):
         posts = []
         for submission in reddit.subreddit('all').search(search_query, limit=30):
             # Collects submission title 
-            posts.append(submission.title)
+            posts.append({
+                'text': submission.title,
+                'timestamp': submission.created_utc  # <-- important
+            })
+            
             
 
         return posts
@@ -181,10 +186,23 @@ def analyze_sentiment():
         # Analyze sentiment for each post
         sentiment_results = []
         for post in posts:
-            sentiment_score = sentiment_func(post)
+            text = post['text']
+            raw_time = post['timestamp']
+
+            # Convert timestamp into date string
+            if platform == 'reddit':
+                date_str = datetime.utcfromtimestamp(raw_time).strftime('%Y-%m-%d')
+            elif platform == 'gnews':
+                from dateutil import parser
+                date_str = parser.parse(raw_time).strftime('%Y-%m-%d')
+            else:
+                date_str = None
+
+            sentiment_score = sentiment_func(text)
             sentiment_results.append({
-                'description': post,
-                'sentiment_score': sentiment_score
+                'description': text,
+                'sentiment_score': sentiment_score,
+                'date': date_str
             })
 
         # Calculate overall sentiment statistics
