@@ -1,11 +1,16 @@
-import { Input, Button } from "@/components"
 import axios from "axios"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
-import { Radio } from "@/components"
-import { StatCard } from "@/components"
 import { FileText, Smile, Globe, Brain } from 'lucide-react';
 import { motion } from "framer-motion"
+
+
+// My Components
+import { SentimentOverTime } from "@/components"
+import { Input, Button } from "@/components"
+import { Radio } from "@/components"
+import { StatCard } from "@/components"
+
 
 // shadCN components
 import { Card } from "@/components/ui/card"
@@ -143,7 +148,7 @@ const SearchAnalyze = () => {
           />
 				</motion.div>
       
-
+      <SentimentOverTime />
 
       <div className="flex justify-center items-center flex-col gap-4 text-white border border-white/15 rounded-lg p-4 text-3xl">
         <h1>Results</h1>
