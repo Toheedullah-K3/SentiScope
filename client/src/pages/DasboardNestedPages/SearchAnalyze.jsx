@@ -150,7 +150,7 @@ const SearchAnalyze = () => {
       
       <SentimentOverTime />
 
-      <div className="flex justify-center items-center flex-col gap-4 text-white border border-white/15 rounded-lg p-4 text-3xl">
+      <div className="flex w-full max-w-screen-lg overflow-hidden justify-center items-center flex-col gap-4 text-white border border-white/15 rounded-lg p-4 text-3xl" >
         <h1>Results</h1>
         <p>Search Query: {option.search}</p>
         <p>Platform: {option.platform}</p>
@@ -159,12 +159,13 @@ const SearchAnalyze = () => {
         <p>Average Sentiment: {option.average_sentiment}</p>
         {console.log("Sentiment Details:", option.sentiment_details)}
         {/* Map func on sentiment_details */}
-        <div>
+        <div className="w-full">
           {option.sentiment_details && option.sentiment_details.map((post, key) => (
             <div key={key}>
               <p>{post.description}</p>
               <p>{post.sentiment_score}</p>
               <p>{post.date}</p>
+              <p>{post.subreddit}</p>
               <p>--------------------------------</p>
             </div>
           ))}

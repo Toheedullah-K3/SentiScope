@@ -75,16 +75,21 @@ def fetch_reddit_posts(search_query):
             user_agent=os.getenv('REDDIT_USER_AGENT')
         )
 
-        # Search across subreddits
         posts = []
-        for submission in reddit.subreddit('all').search(search_query, limit=30):
-            # Collects submission title 
+        for submission in reddit.subreddit('all').search(search_query, sort='new', limit=450):
+            full_text = f"{submission.title} {submission.selftext}".strip()
+
+            # Basic relevance filter: must contain query terms
+            if len(full_text) < 15 or search_query.lower() not in full_text.lower():
+                continue
+
             posts.append({
-                'text': submission.title,
-                'timestamp': submission.created_utc  # <-- important
+                'text': full_text,
+                'timestamp': submission.created_utc,
+                'subreddit': submission.subreddit.display_name,
+                'score': submission.score,
+                'url': submission.url
             })
-            
-            
 
         return posts
 
@@ -92,13 +97,15 @@ def fetch_reddit_posts(search_query):
         logger.error(f"Reddit API Error: {e}")
         return []
 
+
 def get_textblob_sentiment(text):
     """
     Analyze sentiment using TextBlob
     Returns a sentiment score between -1 and 1
     """
     blob = TextBlob(text)
-    return blob.sentiment.polarity
+    rounded_score = round((blob.sentiment.polarity + 1) /2, 2)  # Normalize to [0, 1]
+    return rounded_score
 
 def get_vader_sentiment(text):
     """
@@ -188,6 +195,7 @@ def analyze_sentiment():
         for post in posts:
             text = post['text']
             raw_time = post['timestamp']
+            subreddit = post.get('subreddit', 'N/A')
 
             # Convert timestamp into date string
             if platform == 'reddit':
@@ -202,7 +210,8 @@ def analyze_sentiment():
             sentiment_results.append({
                 'description': text,
                 'sentiment_score': sentiment_score,
-                'date': date_str
+                'date': date_str,
+                'subreddit': subreddit
             })
 
         # Calculate overall sentiment statistics
