@@ -9,14 +9,10 @@ const searchRequestSchema = new Schema(
             trim: true
         }, 
         platform:{
-            type: [String],
-            enum: ["Reddit", "Twitter", "Facebook"],
-            default: ["Twitter"]
+            type: String,
         },
         model: {
-            type: [String],
-            enum: ["Textblob", "Vader", "GenAI"],
-            default: ["Textblob"]
+            type: String,
         },
         userId: {
             type: Schema.Types.ObjectId,
@@ -25,7 +21,7 @@ const searchRequestSchema = new Schema(
     },
     {
         timestamps: true
-    }
+    } 
 )
 
 const SearchRequest = mongoose.model('SearchRequest', searchRequestSchema)
