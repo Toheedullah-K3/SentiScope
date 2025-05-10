@@ -76,7 +76,7 @@ def fetch_reddit_posts(search_query):
         )
 
         posts = []
-        for submission in reddit.subreddit('all').search(search_query, sort='new', limit=450):
+        for submission in reddit.subreddit('all').search(search_query, sort='new', limit=50):
             full_text = f"{submission.title} {submission.selftext}".strip()
 
             # Basic relevance filter: must contain query terms
