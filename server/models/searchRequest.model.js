@@ -2,6 +2,10 @@ import mongoose, {Schema} from "mongoose";
 
 const searchRequestSchema = new Schema(
     {
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: "User"
+        },
         searchQuery: {
             type: String,
             lowercase: true,
@@ -14,10 +18,15 @@ const searchRequestSchema = new Schema(
         model: {
             type: String,
         },
-        userId: {
-            type: Schema.Types.ObjectId,
-            ref: "User"
+        totalPosts: {
+            type: Number,
+            default: 0
+        },
+        averageSentimentScore: {
+            type: Number,
+            default: 0
         }
+        
     },
     {
         timestamps: true

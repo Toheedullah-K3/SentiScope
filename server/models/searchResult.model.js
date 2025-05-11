@@ -16,10 +16,6 @@ const searchResultSchema = new Schema(
             type: String,
             required: true
         },
-        sentiment: {
-            type: String,
-            required: true
-        },
         sentimentScore: {
             type: Number,
             required: true

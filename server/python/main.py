@@ -86,9 +86,7 @@ def fetch_reddit_posts(search_query):
             posts.append({
                 'text': full_text,
                 'timestamp': submission.created_utc,
-                'subreddit': submission.subreddit.display_name,
-                'score': submission.score,
-                'url': submission.url
+                'score': submission.score
             })
 
         return posts
@@ -195,7 +193,6 @@ def analyze_sentiment():
         for post in posts:
             text = post['text']
             raw_time = post['timestamp']
-            subreddit = post.get('subreddit', 'N/A')
 
             # Convert timestamp into date string
             if platform == 'reddit':
@@ -210,8 +207,7 @@ def analyze_sentiment():
             sentiment_results.append({
                 'description': text,
                 'sentiment_score': sentiment_score,
-                'date': date_str,
-                'subreddit': subreddit
+                'date': date_str
             })
 
         # Calculate overall sentiment statistics

@@ -1,6 +1,6 @@
 import axios from "axios";
 import SearchRequest from "../models/searchRequest.model.js";
-
+import SearchResult from "../models/searchResult.model.js";
 
  
 
@@ -12,6 +12,7 @@ const getSearchRequest = async (req, res) => {
     // send the search request to the python server
     // and get the response
     // save the search request to the database
+    // save the search result to the database
     // and send the response to the client
 
 
@@ -43,8 +44,19 @@ const getSearchRequest = async (req, res) => {
             searchQuery: search,
             platform: platform,
             model: model,
-            userId: req.user?.id || null
+            userId: req.user?.id || null,
+            totalPosts: total_posts,
+            averageSentimentScore: average_sentiment
         })
+
+        const searchResult = await SearchResult.insertMany(
+            sentiment_details.map((result) => ({
+                searchRequestId: searchRequest._id,
+                postText: result.description || "",
+                postCreatedAt: result.date || "",
+                sentimentScore: result.sentiment_score
+            }))
+        )
         
         res.status(200).json(
             { total_posts, average_sentiment, sentiment_details }
