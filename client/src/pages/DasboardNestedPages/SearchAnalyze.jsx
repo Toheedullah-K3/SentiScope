@@ -3,7 +3,8 @@ import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { FileText, Smile, Globe, Brain } from 'lucide-react';
 import { motion } from "framer-motion"
-
+import { useNavigate, useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 // My Components
 import { SentimentOverTime } from "@/components"
@@ -19,15 +20,30 @@ import { Card } from "@/components/ui/card"
 const SearchAnalyze = () => {
   const [option, setOption] = useState([])
   const { register, handleSubmit, watch } = useForm()
+  const navigate = useNavigate()
+  const location = useLocation()
 
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("query")
+  const platform = searchParams.get("platform")
+  const model = searchParams.get("model")
+  
   const apiUrl = import.meta.env.VITE_API_URL
 
   const createSearch = async (data) => {
+    // navigate params 
+
+    navigate(`/dashboard/sentiment-analysis?query=${data.search}&platform=${data.platform}&model=${data.model}`)
     try {
-      const response = await axios.post(`${apiUrl}/api/v1/search/getSearchRequest`, data, {
+      const response = await axios.get(`${apiUrl}/api/v1/search/getSearchRequest`, {
+        params: {
+          search: data.search,
+          model: data.model,
+          platform: data.platform
+        },
         withCredentials: true
       })
-
+ 
       const { total_posts, average_sentiment, sentiment_details } = response.data
       console.log("Python Server Response:", response.data)
       console.log("Total Posts:", total_posts)
@@ -43,9 +59,6 @@ const SearchAnalyze = () => {
         average_sentiment,
         sentiment_details
       })
-
-
-
       
     } catch (error) {
       console.log(error)
@@ -62,7 +75,7 @@ const SearchAnalyze = () => {
       >
         <div className="flex border border-white/15 rounded-full p-2 mt-8 max-w-lg mx-auto">
           <Input
-            type="text" placeholder="Analyze sentiment—Try 'AI' or 'Bitcoin'!"
+            stype="text" placeholder="Analyze sentiment—Try 'AI' or 'Bitcoin'!"
             className='outline-none px-4 flex-1'
             {...register('search')}
           />

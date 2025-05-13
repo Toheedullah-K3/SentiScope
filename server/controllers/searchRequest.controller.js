@@ -5,7 +5,7 @@ import SearchResult from "../models/searchResult.model.js";
  
 
 const getSearchRequest = async (req, res) => {
-    // get the search request from the body
+    // get the search request from the query
     // Validate the request body 
     // check if searchRequest is already in the database
     // if it is, return the response from the database
@@ -16,10 +16,10 @@ const getSearchRequest = async (req, res) => {
     // and send the response to the client
 
 
-    const { search, model, platform } = req.body;
+    const { search, model, platform } = req.query;
 
     if(!(search && model && platform)){
-        return res.status(400).json({ error: "Please provide all required fields" });
+        return res.status(400).json({ error: "Missing query, model, or platform" });
     }
 
     const existingRequest = await SearchRequest.findOne({searchQuery: search });
@@ -40,6 +40,10 @@ const getSearchRequest = async (req, res) => {
 
         console.log("Python Server Response:", response.data);
         
+        if(!total_posts || sentiment_details.length === 0){
+            return res.status(404).json({ error: "No results found" });
+        }
+
         const searchRequest = await SearchRequest.create({
             searchQuery: search,
             platform: platform,
@@ -68,4 +72,8 @@ const getSearchRequest = async (req, res) => {
     }
 };
  
+
+const getSearchResult = async (req, res) => {
+    // get the search request id from paramslk
+}
 export { getSearchRequest };

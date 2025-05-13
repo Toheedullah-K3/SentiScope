@@ -4,6 +4,6 @@ import { VerifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router()
 
-router.route('/getSearchRequest').post(VerifyJWT, getSearchRequest)
+router.route('/getSearchRequest').get(VerifyJWT, getSearchRequest)
 
 export default router
