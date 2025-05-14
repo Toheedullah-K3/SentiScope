@@ -30,7 +30,8 @@ const getSearchRequest = async (req, res) => {
             message: "Search request already exists",
             total_posts: existingRequest.total_posts,
             average_sentiment: existingRequest.average_sentiment,
-            sentiment_details: existingRequest.sentiment_details
+            sentiment_details: existingRequest.sentiment_details,
+            searchRequestId: existingRequest._id
         })
     }
     console.log("Search Request:", search, model, platform);
@@ -63,7 +64,7 @@ const getSearchRequest = async (req, res) => {
         )
         
         res.status(200).json(
-            { total_posts, average_sentiment, sentiment_details }
+            { total_posts, average_sentiment, sentiment_details, searchRequestId: searchRequest._id }
         );
         
     } catch (error) {
@@ -73,7 +74,7 @@ const getSearchRequest = async (req, res) => {
 };
  
 
-const getSearchResult = async (req, res) => {
-    // get the search request id from paramslk
+const getSentimentTrends = async (req, res) => {
+    // get the
 }
 export { getSearchRequest };

@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useForm } from "react-hook-form"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FileText, Smile, Globe, Brain } from 'lucide-react';
 import { motion } from "framer-motion"
 import { useNavigate, useLocation } from "react-router-dom";
@@ -27,13 +27,22 @@ const SearchAnalyze = () => {
   const search = searchParams.get("query")
   const platform = searchParams.get("platform")
   const model = searchParams.get("model")
-  
+  const id = searchParams.get("id")
+
+
   const apiUrl = import.meta.env.VITE_API_URL
 
-  const createSearch = async (data) => {
-    // navigate params 
-
-    navigate(`/dashboard/sentiment-analysis?query=${data.search}&platform=${data.platform}&model=${data.model}`)
+  // Fetch data again if page is refreshed
+  
+  useEffect(() => {
+  
+    return () => {
+      
+    }
+  }, [])
+  
+  
+  const createSearch = async (data) => { 
     try {
       const response = await axios.get(`${apiUrl}/api/v1/search/getSearchRequest`, {
         params: {
@@ -44,12 +53,14 @@ const SearchAnalyze = () => {
         withCredentials: true
       })
  
-      const { total_posts, average_sentiment, sentiment_details } = response.data
+      const { total_posts, average_sentiment, sentiment_details, searchRequestId } = response.data
       console.log("Python Server Response:", response.data)
       console.log("Total Posts:", total_posts)
       console.log("Average Sentiment:", average_sentiment)
       console.log("Sentiment Details:", sentiment_details)
+      console.log("SearchRequestId:", searchRequestId)
 
+      navigate(`/dashboard/sentiment-analysis?query=${data.search}&platform=${data.platform}&model=${data.model}&id=${searchRequestId}`)
 
       setOption({ 
         search: data.search,
@@ -57,7 +68,8 @@ const SearchAnalyze = () => {
         model: data.model,
         total_posts,
         average_sentiment,
-        sentiment_details
+        sentiment_details,
+        searchRequestId
       })
       
     } catch (error) {
