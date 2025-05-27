@@ -35,6 +35,7 @@ const getSearchRequest = async (req, res) => {
         })
     }
     console.log("Search Request:", search, model, platform);
+    
     try {
         const response = await axios.post("http://127.0.0.1:5000", { search, model, platform });
         const { total_posts, average_sentiment, sentiment_details } = response.data;
@@ -73,8 +74,25 @@ const getSearchRequest = async (req, res) => {
     }
 };
  
+const getSearchRequestById = async (req, res) => {
+    const {id} = req.query;
 
+    try {
+        const searchRequest = await SearchRequest.findById(id)
+
+        return res.status(200).json({
+            message: "SearchRequestById searched Successfully!",
+            searchRequest
+        })
+    } catch (error) {
+        console.error("Error", error)
+    }
+
+}
 const getSentimentTrends = async (req, res) => {
     // get the
 }
-export { getSearchRequest };
+export { 
+    getSearchRequest,
+    getSearchRequestById
+};

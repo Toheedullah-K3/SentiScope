@@ -27,22 +27,44 @@ const SearchAnalyze = () => {
   const search = searchParams.get("query")
   const platform = searchParams.get("platform")
   const model = searchParams.get("model")
-  const id = searchParams.get("id")
+  const searchRequestId = searchParams.get("id")
 
 
   const apiUrl = import.meta.env.VITE_API_URL
 
   // Fetch data again if page is refreshed
-  
+
   useEffect(() => {
-  
-    return () => {
-      
-    }
-  }, [])
-  
-  
-  const createSearch = async (data) => { 
+    
+    const fetchDetailsFromId = async () => {
+      if (!searchRequestId) return;
+      try {
+        const response = await axios.get(`${apiUrl}/api/v1/search/getSearchDetailsById`, {
+          params: { searchRequestId },
+          withCredentials: true
+        });
+
+        const { total_posts, average_sentiment, sentiment_details } = response.data;
+
+        setOption({
+          search,
+          platform,
+          model,
+          total_posts,
+          average_sentiment,
+          sentiment_details,
+          searchRequestId
+        });
+      } catch (error) {
+        console.error("Error loading data on refresh:", error);
+      }
+    };
+
+    fetchDetailsFromId();
+  }, [searchRequestId, search, platform, model, apiUrl]);
+
+
+  const createSearch = async (data) => {
     try {
       const response = await axios.get(`${apiUrl}/api/v1/search/getSearchRequest`, {
         params: {
@@ -52,7 +74,7 @@ const SearchAnalyze = () => {
         },
         withCredentials: true
       })
- 
+
       const { total_posts, average_sentiment, sentiment_details, searchRequestId } = response.data
       console.log("Python Server Response:", response.data)
       console.log("Total Posts:", total_posts)
@@ -62,7 +84,7 @@ const SearchAnalyze = () => {
 
       navigate(`/dashboard/sentiment-analysis?query=${data.search}&platform=${data.platform}&model=${data.model}&id=${searchRequestId}`)
 
-      setOption({ 
+      setOption({
         search: data.search,
         platform: data.platform,
         model: data.model,
@@ -71,11 +93,12 @@ const SearchAnalyze = () => {
         sentiment_details,
         searchRequestId
       })
-      
+
     } catch (error) {
       console.log(error)
     }
   }
+
   return (
     <>
       <h1 className="text-3xl capitalize font-bold">Dashboard</h1>
@@ -98,7 +121,7 @@ const SearchAnalyze = () => {
         <div className="flex justify-center items-center gap-4 mt-4">
           <p className="text-white text-sm">Select Platform</p>
           <Radio
-            {...register("platform")} 
+            {...register("platform")}
             label="GNews Api"
             value="gnews"
           />
@@ -136,43 +159,43 @@ const SearchAnalyze = () => {
         </div>
       </form>
 
-      
+
       <br />
       <br />
 
       {/* <Chart /> */}
       <motion.div
-					className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8'
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 1 }}
-				>
-					<StatCard 
-            name='Total Posts' 
-            icon={FileText} 
-            value={option.total_posts ? option.total_posts : 0}
-            color='#6366F1' 
-          />
-					<StatCard 
-            name='Sentiment Score' 
-            icon={Smile} 
-            value={option.average_sentiment ? option.average_sentiment : 0}
-            color='#8B5CF6' 
-          />
-					<StatCard 
-            name='Platform' 
-            icon={Globe} 
-            value={watch("platform")?.charAt(0).toUpperCase() + watch("platform")?.slice(1)}
-            color='#EC4899' 
-          />
-					<StatCard 
-            name='Model' 
-            icon={Brain} 
-            value={watch("model")?.charAt(0).toUpperCase() + watch("model")?.slice(1)}
-            color='#10B981' 
-          />
-				</motion.div>
-      
+        className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8'
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+      >
+        <StatCard
+          name='Total Posts'
+          icon={FileText}
+          value={option.total_posts ? option.total_posts : 0}
+          color='#6366F1'
+        />
+        <StatCard
+          name='Sentiment Score'
+          icon={Smile}
+          value={option.average_sentiment ? option.average_sentiment : 0}
+          color='#8B5CF6'
+        />
+        <StatCard
+          name='Platform'
+          icon={Globe}
+          value={watch("platform")?.charAt(0).toUpperCase() + watch("platform")?.slice(1)}
+          color='#EC4899'
+        />
+        <StatCard
+          name='Model'
+          icon={Brain}
+          value={watch("model")?.charAt(0).toUpperCase() + watch("model")?.slice(1)}
+          color='#10B981'
+        />
+      </motion.div>
+
       <SentimentOverTime />
 
 
