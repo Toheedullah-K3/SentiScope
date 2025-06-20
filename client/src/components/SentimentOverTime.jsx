@@ -1,5 +1,7 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { motion } from "framer-motion";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 const salesData = [
     { name: "Jul", sales: 4200 },
@@ -16,8 +18,16 @@ const salesData = [
     { name: "Jun", sales: 7500 },
 ];
 
+const apiUrl = import.meta.env.VITE_API_URL;
 
-const SentimentOverTime = () => {
+
+const SentimentOverTime = ({
+    query,
+    model,
+    platform
+}) => {
+    const [chartData, setChartData] = useState([]);
+    
   return (
     <motion.div
         className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl border border-gray-700 w-[50%] p-4"

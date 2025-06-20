@@ -27,7 +27,7 @@ const SearchAnalyze = () => {
   const search = searchParams.get("query")
   const platform = searchParams.get("platform")
   const model = searchParams.get("model")
-  const searchRequestId = searchParams.get("id")
+  const id = searchParams.get("id")
 
 
   const apiUrl = import.meta.env.VITE_API_URL
@@ -35,12 +35,11 @@ const SearchAnalyze = () => {
   // Fetch data again if page is refreshed
 
   useEffect(() => {
-    
     const fetchDetailsFromId = async () => {
-      if (!searchRequestId) return;
+      if (!id) return;
       try {
         const response = await axios.get(`${apiUrl}/api/v1/search/getSearchDetailsById`, {
-          params: { searchRequestId },
+          params: { id },
           withCredentials: true
         });
 
@@ -53,7 +52,7 @@ const SearchAnalyze = () => {
           total_posts,
           average_sentiment,
           sentiment_details,
-          searchRequestId
+          id
         });
       } catch (error) {
         console.error("Error loading data on refresh:", error);
@@ -61,7 +60,7 @@ const SearchAnalyze = () => {
     };
 
     fetchDetailsFromId();
-  }, [searchRequestId, search, platform, model, apiUrl]);
+  }, [id, search, platform, model, apiUrl]);
 
 
   const createSearch = async (data) => {
@@ -82,7 +81,7 @@ const SearchAnalyze = () => {
       console.log("Sentiment Details:", sentiment_details)
       console.log("SearchRequestId:", searchRequestId)
 
-      navigate(`/dashboard/sentiment-analysis?query=${data.search}&platform=${data.platform}&model=${data.model}&id=${searchRequestId}`)
+      navigate(`/dashboard/sentiment-analysis?id=${searchRequestId}`)
 
       setOption({
         search: data.search,
@@ -196,7 +195,11 @@ const SearchAnalyze = () => {
         />
       </motion.div>
 
-      <SentimentOverTime />
+      <SentimentOverTime 
+        query={watch("search")}
+        model={watch("model")}
+        platform={watch("platform")}
+      />
 
 
       <div className="flex w-full max-w-screen-lg overflow-hidden justify-center items-center flex-col gap-4 text-white border border-white/15 rounded-lg p-4 text-3xl" >
