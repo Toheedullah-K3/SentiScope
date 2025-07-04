@@ -14,6 +14,7 @@ import SentimentBreakdown from "./SentimentBreakdown.jsx";
 import PostTimeline from "./PostTimeline.jsx";
 import TopKeywords from "./TopKeywords.jsx";
 import WordCloudChart from "./WordCloudChart.jsx";
+import ComparisonLineChart from "./ComparisonLineChart.jsx";
 
 export { 
     Navbar,
@@ -31,7 +32,8 @@ export {
     SentimentBreakdown,
     PostTimeline,
     TopKeywords,
-    WordCloudChart
+    WordCloudChart,
+    ComparisonLineChart
 };
 
 
