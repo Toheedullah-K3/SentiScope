@@ -6,17 +6,25 @@ import { motion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 // Components
-import { SentimentOverTime, SentimentBreakdown, PostTimeline, Input, Button, Radio, StatCard } from "@/components";
-import { Card } from "@/components/ui/card";
+import { 
+  SentimentOverTime, 
+  SentimentBreakdown, 
+  PostTimeline, 
+  TopKeywords,
+  WordCloudChart,
+  Input, 
+  Button, 
+  Radio, 
+  StatCard 
+} from "@/components";
 
 const SearchAnalyze = () => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
   const apiUrl = import.meta.env.VITE_API_URL;
-  const [option, setOption] = useState({});
 
+  const [option, setOption] = useState({});
   const id = searchParams.get("id");
 
   useEffect(() => {
@@ -87,9 +95,11 @@ const SearchAnalyze = () => {
 
   return (
     <>
+      {/* Header */}
       <h1 className="text-3xl capitalize font-bold">Dashboard</h1>
       <h6 className="text-lime-500 text-sm font-bold">Welcome to your Dashboard</h6>
 
+      {/* Search Form */}
       <form onSubmit={handleSubmit(createSearch)} className="">
         <div className="flex border border-white/15 rounded-full p-2 mt-8 max-w-lg mx-auto">
           <Input
@@ -116,10 +126,11 @@ const SearchAnalyze = () => {
         </div>
       </form>
 
-      <br /><br />
+      <br />
 
+      {/* Stat Cards */}
       <motion.div
-        className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8'
+        className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-10'
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
@@ -130,22 +141,27 @@ const SearchAnalyze = () => {
         <StatCard name='Model' icon={Brain} value={option.model || "—"} color='#10B981' />
       </motion.div>
 
-      <SentimentOverTime
-        query={option.search}
-        model={option.model}
-        platform={option.platform}
-      />
+      {/* Visual Insight Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <SentimentOverTime
+          query={option.search}
+          model={option.model}
+          platform={option.platform}
+        />
 
-      <SentimentBreakdown 
-        sentimentDetails = {option.sentiment_details || []}
-      />
+        <SentimentBreakdown sentimentDetails={option.sentiment_details || []} />
 
-      <PostTimeline 
-        sentimentDetails={option.sentiment_details || []}
-      />
+        <WordCloudChart sentimentDetails={option.sentiment_details || []} />
 
-      <div className="flex w-full max-w-screen-lg overflow-hidden justify-center items-center flex-col gap-4 text-white border border-white/15 rounded-lg p-4 text-3xl" >
-        <h1>Results</h1>
+        <TopKeywords sentimentDetails={option.sentiment_details || []} />
+      </div>
+
+      {/* Timeline */}
+      <PostTimeline sentimentDetails={option.sentiment_details || []} />
+
+      {/* Raw Post List (optional) */}
+      <div className="flex w-full max-w-screen-lg overflow-hidden justify-center items-center flex-col gap-4 text-white border border-white/15 rounded-lg p-4 text-3xl mt-10" >
+        <h1>📄 Results</h1>
         <p>Search Query: {option.search}</p>
         <p>Platform: {option.platform}</p>
         <p>Model: {option.model}</p>

@@ -12,6 +12,8 @@ import StatCard from "./StatCard.jsx";
 import SentimentOverTime from "./SentimentOverTime.jsx";
 import SentimentBreakdown from "./SentimentBreakdown.jsx";
 import PostTimeline from "./PostTimeline.jsx";
+import TopKeywords from "./TopKeywords.jsx";
+import WordCloudChart from "./WordCloudChart.jsx";
 
 export { 
     Navbar,
@@ -27,7 +29,9 @@ export {
     StatCard,
     SentimentOverTime,
     SentimentBreakdown,
-    PostTimeline
+    PostTimeline,
+    TopKeywords,
+    WordCloudChart
 };
 
 
