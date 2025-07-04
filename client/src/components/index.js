@@ -11,7 +11,7 @@ import Radio from "./Radio.jsx";
 import StatCard from "./StatCard.jsx";
 import SentimentOverTime from "./SentimentOverTime.jsx";
 import SentimentBreakdown from "./SentimentBreakdown.jsx";
-
+import PostTimeline from "./PostTimeline.jsx";
 
 export { 
     Navbar,
@@ -26,7 +26,8 @@ export {
     Radio,
     StatCard,
     SentimentOverTime,
-    SentimentBreakdown
+    SentimentBreakdown,
+    PostTimeline
 };
 
 
