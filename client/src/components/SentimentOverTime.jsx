@@ -15,10 +15,13 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 const SentimentOverTime = ({ query, model, platform }) => {
   const [chartData, setChartData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     const fetchSentimentOverTime = async () => {
+      setLoading(true);
+      setErrorMsg("");
       try {
         const response = await axios.get(
           `${apiUrl}/api/v1/search/getSentimentOverTime`,
@@ -31,10 +34,17 @@ const SentimentOverTime = ({ query, model, platform }) => {
             withCredentials: true,
           }
         );
-        setChartData(response.data);
+
+        if (Array.isArray(response.data) && response.data.length > 0) {
+          setChartData(response.data);
+        } else {
+          setChartData([]);
+          setErrorMsg("No sentiment data available.");
+        }
       } catch (error) {
         console.error("Error fetching sentiment over time:", error);
-        setChartData([]); // fallback to avoid chart crash
+        setChartData([]);
+        setErrorMsg("Failed to fetch sentiment data.");
       } finally {
         setLoading(false);
       }
@@ -42,15 +52,15 @@ const SentimentOverTime = ({ query, model, platform }) => {
 
     if (query && model && platform) {
       fetchSentimentOverTime();
-    }else {
-      setLoading(false);
-      setChartData([]); 
+    } else {
+      setChartData([]);
+      setErrorMsg("Please complete search to view sentiment over time.");
     }
   }, [query, model, platform]);
 
   return (
     <motion.div
-      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl border border-gray-700 w-[50%] p-4"
+      className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl border border-gray-700 w-full md:w-[50%] p-4"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
@@ -63,8 +73,8 @@ const SentimentOverTime = ({ query, model, platform }) => {
         {loading ? (
           <div className="text-gray-400">Loading chart...</div>
         ) : chartData.length === 0 ? (
-          <div className="text-gray-500 text-sm italic">
-            No sentiment data available for this query and platform.
+          <div className="text-gray-500 text-sm italic text-center px-2">
+            {errorMsg}
           </div>
         ) : (
           <ResponsiveContainer width="100%" height="100%">
@@ -81,7 +91,7 @@ const SentimentOverTime = ({ query, model, platform }) => {
               />
               <Line
                 type="monotone"
-                dataKey="sales"
+                dataKey="sentiment" // ✅ Corrected from `sales` to `sentiment`
                 stroke="#6366F1"
                 strokeWidth={3}
                 dot={{ fill: "#6366F1", strokeWidth: 2, r: 6 }}
