@@ -136,7 +136,9 @@ const SearchAnalyze = () => {
         platform={option.platform}
       />
 
-      <SentimentBreakdown />
+      <SentimentBreakdown 
+        sentimentDetails = {option.sentiment_details || []}
+      />
 
       <div className="flex w-full max-w-screen-lg overflow-hidden justify-center items-center flex-col gap-4 text-white border border-white/15 rounded-lg p-4 text-3xl" >
         <h1>Results</h1>
