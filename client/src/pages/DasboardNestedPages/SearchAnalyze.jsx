@@ -128,6 +128,19 @@ const SearchAnalyze = () => {
 
       <br />
 
+      {/* Empty state when no search yet */}
+      {!option.search && (
+        <div className="border border-dashed border-white/20 rounded-xl p-6 text-center text-white bg-gray-800/50 backdrop-blur-md shadow-md mt-10 mb-14 max-w-2xl mx-auto">
+          <h2 className="text-xl font-semibold mb-2">🔍 Ready to Analyze the Internet?</h2>
+          <p className="text-gray-300 mb-3">
+            Enter a keyword, select a platform & model — and we’ll gather public posts and analyze their sentiment for you.
+          </p>
+          <p className="text-gray-400 text-sm">
+            Try something like: <span className="text-lime-400 font-medium">"Bitcoin"</span>, <span className="text-pink-400 font-medium">"AI"</span>, or <span className="text-blue-400 font-medium">"Elections"</span>.
+          </p>
+        </div>
+      )}
+
       {/* Stat Cards */}
       <motion.div
         className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-10'
@@ -158,27 +171,9 @@ const SearchAnalyze = () => {
 
       {/* Timeline */}
       <PostTimeline sentimentDetails={option.sentiment_details || []} />
+      <br />
 
-      {/* Raw Post List (optional) */}
-      <div className="flex w-full max-w-screen-lg overflow-hidden justify-center items-center flex-col gap-4 text-white border border-white/15 rounded-lg p-4 text-3xl mt-10" >
-        <h1>📄 Results</h1>
-        <p>Search Query: {option.search}</p>
-        <p>Platform: {option.platform}</p>
-        <p>Model: {option.model}</p>
-        <p>Total Posts: {option.total_posts}</p>
-        <p>Average Sentiment: {option.average_sentiment}</p>
-
-        <div className="w-full">
-          {option.sentiment_details?.map((post, key) => (
-            <div key={key} className="text-base mb-2 border-b border-white/10 pb-2">
-              <p>{post.description}</p>
-              <p className="text-sm text-green-400">Score: {post.sentiment_score}</p>
-              <p className="text-sm text-gray-400">Date: {post.date}</p>
-              <p className="text-sm text-blue-400">Source: {post.subreddit || "—"}</p>
-            </div>
-          ))}
-        </div>
-      </div>
+      
     </>
   );
 };

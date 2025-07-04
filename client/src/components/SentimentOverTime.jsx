@@ -51,6 +51,8 @@ const SentimentOverTime = ({ query, model, platform }) => {
     fetchSentimentOverTime();
   }, [query, model, platform]);
 
+  if (!query || !model || !platform) return null;
+  
   return (
     <motion.div
       className="bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl border border-gray-700 w-full p-4"

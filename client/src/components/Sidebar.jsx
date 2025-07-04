@@ -35,7 +35,7 @@ const Dashboard = () => {
           hoverText= "Compare"
           active= {selected === "Compare Trends"} 
           onClick={()=> {
-            navigate('') 
+            navigate('/dashboard/compare-trends') 
             setSelected("Compare Trends")
           }}
         />
