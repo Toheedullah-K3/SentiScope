@@ -10,6 +10,8 @@ import Sidebar from "./Sidebar.jsx"
 import Radio from "./Radio.jsx";
 import StatCard from "./StatCard.jsx";
 import SentimentOverTime from "./SentimentOverTime.jsx";
+import SentimentBreakdown from "./SentimentBreakdown.jsx";
+
 
 export { 
     Navbar,
@@ -23,7 +25,8 @@ export {
     Sidebar,
     Radio,
     StatCard,
-    SentimentOverTime
+    SentimentOverTime,
+    SentimentBreakdown
 };
 
 

@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 // Components
-import { SentimentOverTime, Input, Button, Radio, StatCard } from "@/components";
+import { SentimentOverTime, SentimentBreakdown, Input, Button, Radio, StatCard } from "@/components";
 import { Card } from "@/components/ui/card";
 
 const SearchAnalyze = () => {
@@ -135,6 +135,8 @@ const SearchAnalyze = () => {
         model={option.model}
         platform={option.platform}
       />
+
+      <SentimentBreakdown />
 
       <div className="flex w-full max-w-screen-lg overflow-hidden justify-center items-center flex-col gap-4 text-white border border-white/15 rounded-lg p-4 text-3xl" >
         <h1>Results</h1>
