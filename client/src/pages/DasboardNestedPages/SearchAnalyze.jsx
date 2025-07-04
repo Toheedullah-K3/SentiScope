@@ -1,5 +1,3 @@
-// ✅ FRONTEND CODE
-
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
@@ -7,7 +5,7 @@ import { FileText, Smile, Globe, Brain } from 'lucide-react';
 import { motion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-// My Components
+// Components
 import { SentimentOverTime, Input, Button, Radio, StatCard } from "@/components";
 import { Card } from "@/components/ui/card";
 
@@ -17,51 +15,46 @@ const SearchAnalyze = () => {
   const [searchParams] = useSearchParams();
 
   const apiUrl = import.meta.env.VITE_API_URL;
-
-  const [submittedSearch, setSubmittedSearch] = useState("");
-  const [submittedModel, setSubmittedModel] = useState("");
-  const [submittedPlatform, setSubmittedPlatform] = useState("");
   const [option, setOption] = useState({});
 
-  const search = searchParams.get("query");
-  const platform = searchParams.get("platform");
-  const model = searchParams.get("model");
   const id = searchParams.get("id");
 
-useEffect(() => {
-  const fetchDetailsFromId = async () => {
-    if (!id) return;
-    try {
-      const response = await axios.get(`${apiUrl}/api/v1/search/getSearchRequestById`, {
-        params: { id },
-        withCredentials: true
-      });
+  useEffect(() => {
+    const fetchDetailsFromId = async () => {
+      if (!id) return;
+      try {
+        const response = await axios.get(`${apiUrl}/api/v1/search/getSearchRequestById`, {
+          params: { id },
+          withCredentials: true
+        });
 
-      const { total_posts, average_sentiment, sentiment_details } = response.data;
+        const {
+          search,
+          model,
+          platform,
+          total_posts,
+          average_sentiment,
+          sentiment_details
+        } = response.data;
 
-      setOption({
-        search,
-        platform,
-        model,
-        total_posts,
-        average_sentiment,
-        sentiment_details,
-        id
-      });
+        setOption({
+          search,
+          model,
+          platform,
+          total_posts,
+          average_sentiment,
+          sentiment_details,
+          id
+        });
+      } catch (error) {
+        console.error("Error loading data on refresh:", error?.response?.data || error.message);
+        alert("The search data may no longer exist. Please try a new query.");
+        navigate("/dashboard/sentiment-analysis");
+      }
+    };
 
-      setSubmittedSearch(search);
-      setSubmittedModel(model);
-      setSubmittedPlatform(platform);
-    } catch (error) {
-      console.error("Error loading data on refresh:", error?.response?.data || error.message);
-      alert("The search data may no longer exist. Please try a new query.");
-      navigate("/dashboard/sentiment-analysis"); // fallback to clear state
-    }
-  };
-
-  fetchDetailsFromId();
-}, [id, search, platform, model, apiUrl]);
-
+    fetchDetailsFromId();
+  }, [id]);
 
   const createSearch = async (data) => {
     try {
@@ -74,24 +67,17 @@ useEffect(() => {
         withCredentials: true
       });
 
-      const { total_posts, average_sentiment, sentiment_details, model, platform, search, searchRequestId } = response.data;
+      const { total_posts, average_sentiment, sentiment_details, searchRequestId } = response.data;
 
-      console.log("Search response:", response.data);
       setOption({
-        search,
-        platform,
-        model,
+        search: data.search,
+        model: data.model,
+        platform: data.platform,
         total_posts,
         average_sentiment,
         sentiment_details,
-        searchRequestId
+        id: searchRequestId
       });
-
-  
-
-      setSubmittedSearch(data.search);
-      setSubmittedModel(data.model);
-      setSubmittedPlatform(data.platform);
 
       navigate(`/dashboard/sentiment-analysis?id=${searchRequestId}`);
     } catch (error) {
@@ -130,8 +116,7 @@ useEffect(() => {
         </div>
       </form>
 
-      <br />
-      <br />
+      <br /><br />
 
       <motion.div
         className='grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8'
@@ -146,9 +131,9 @@ useEffect(() => {
       </motion.div>
 
       <SentimentOverTime
-        query={submittedSearch}
-        model={submittedModel}
-        platform={submittedPlatform}
+        query={option.search}
+        model={option.model}
+        platform={option.platform}
       />
 
       <div className="flex w-full max-w-screen-lg overflow-hidden justify-center items-center flex-col gap-4 text-white border border-white/15 rounded-lg p-4 text-3xl" >

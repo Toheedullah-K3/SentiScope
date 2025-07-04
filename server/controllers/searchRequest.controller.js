@@ -60,7 +60,6 @@ const getSearchRequest = async (req, res) => {
       average_sentiment,
       model,
       platform,
-      search,
       sentiment_details,
       searchRequestId: searchRequest._id
     });
@@ -86,6 +85,9 @@ const getSearchRequestById = async (req, res) => {
 
     return res.status(200).json({
       message: "SearchRequestById fetched successfully!",
+      search: searchRequest.searchQuery,
+      platform: searchRequest.platform,
+      model: searchRequest.model,
       total_posts: searchRequest.totalPosts,
       average_sentiment: searchRequest.averageSentimentScore,
       sentiment_details: searchResults.map((result) => ({
@@ -100,6 +102,7 @@ const getSearchRequestById = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 
 const getSentimentOverTime = async (req, res) => {

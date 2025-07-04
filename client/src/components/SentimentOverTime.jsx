@@ -19,6 +19,8 @@ const SentimentOverTime = ({ query, model, platform }) => {
   const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
+    if (!query || !model || !platform) return;
+
     const fetchSentimentOverTime = async () => {
       setLoading(true);
       setErrorMsg("");
@@ -26,11 +28,7 @@ const SentimentOverTime = ({ query, model, platform }) => {
         const response = await axios.get(
           `${apiUrl}/api/v1/search/getSentimentOverTime`,
           {
-            params: {
-              query,
-              model,
-              platform,
-            },
+            params: { query, model, platform },
             withCredentials: true,
           }
         );
@@ -50,12 +48,7 @@ const SentimentOverTime = ({ query, model, platform }) => {
       }
     };
 
-    if (query && model && platform) {
-      fetchSentimentOverTime();
-    } else {
-      setChartData([]);
-      setErrorMsg("Please complete search to view sentiment over time.");
-    }
+    fetchSentimentOverTime();
   }, [query, model, platform]);
 
   return (
@@ -91,7 +84,7 @@ const SentimentOverTime = ({ query, model, platform }) => {
               />
               <Line
                 type="monotone"
-                dataKey="sentiment" // ✅ Corrected from `sales` to `sentiment`
+                dataKey="sentiment"
                 stroke="#6366F1"
                 strokeWidth={3}
                 dot={{ fill: "#6366F1", strokeWidth: 2, r: 6 }}
