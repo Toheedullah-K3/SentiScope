@@ -1,10 +1,15 @@
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { Input, Button, Radio } from "@/components";
-import StatCard from "@/components/StatCard";
-import ComparisonLineChart from "@/components/ComparisonLineChart";
-import { FileText, Smile, Globe, Brain } from "lucide-react";
+import {
+  ComparisonLineChart,
+  TopicSharePie,
+  StatCard,
+  Input,
+  Button,
+  Radio
+} from "@/components";
+import { FileText, Smile } from "lucide-react";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -65,61 +70,84 @@ const ComparePanel = () => {
 
   return (
     <div className="px-6 py-8">
-      <h1 className="text-3xl font-bold text-white mb-4">⚔️ Compare Two Queries</h1>
+      <h1 className="text-3xl font-bold text-white mb-2">⚔️ Compare Two Queries</h1>
+      <p className="text-sm text-gray-400 mb-6">Compare trends, sentiment scores, and topic shares between two topics or keywords.</p>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="grid md:grid-cols-2 gap-6">
+      {/* Query Forms */}
+      <form onSubmit={handleSubmit(onSubmit)} className="grid md:grid-cols-2 gap-6 mb-6">
         {/* Query 1 */}
-        <div className="border border-gray-600 rounded-lg p-4">
-          <h3 className="text-white font-semibold mb-2">Query 1</h3>
-          <Input {...register("query1")} placeholder="Enter first query" />
-          <div className="flex gap-4 mt-2">
-            <Radio {...register("platform1")} label="Reddit" value="reddit" />
-            <Radio {...register("platform1")} label="GNews" value="gnews" />
-            <Radio {...register("platform1")} label="Twitter" value="twitter" />
-          </div>
-          <div className="flex gap-4 mt-2">
-            <Radio {...register("model1")} label="VADER" value="vader" />
-            <Radio {...register("model1")} label="TextBlob" value="textblob" />
-            <Radio {...register("model1")} label="GenAI" value="genai" />
+        <div className="border border-gray-700 bg-gray-900/40 rounded-lg p-5">
+          <h3 className="text-white font-semibold mb-2">🔹 Query 1</h3>
+          <Input {...register("query1")} placeholder="e.g. AI, Economy" />
+          <div className="mt-4 space-y-2">
+            <p className="text-sm text-gray-400">Platform</p>
+            <div className="flex gap-4">
+              <Radio {...register("platform1")} label="Reddit" value="reddit" />
+              <Radio {...register("platform1")} label="GNews" value="gnews" />
+              <Radio {...register("platform1")} label="Twitter" value="twitter" />
+            </div>
+            <p className="text-sm text-gray-400">Model</p>
+            <div className="flex gap-4">
+              <Radio {...register("model1")} label="VADER" value="vader" />
+              <Radio {...register("model1")} label="TextBlob" value="textblob" />
+              <Radio {...register("model1")} label="GenAI" value="genai" />
+            </div>
           </div>
         </div>
 
         {/* Query 2 */}
-        <div className="border border-gray-600 rounded-lg p-4">
-          <h3 className="text-white font-semibold mb-2">Query 2</h3>
-          <Input {...register("query2")} placeholder="Enter second query" />
-          <div className="flex gap-4 mt-2">
-            <Radio {...register("platform2")} label="Reddit" value="reddit" />
-            <Radio {...register("platform2")} label="GNews" value="gnews" />
-            <Radio {...register("platform2")} label="Twitter" value="twitter" />
-          </div>
-          <div className="flex gap-4 mt-2">
-            <Radio {...register("model2")} label="VADER" value="vader" />
-            <Radio {...register("model2")} label="TextBlob" value="textblob" />
-            <Radio {...register("model2")} label="GenAI" value="genai" />
+        <div className="border border-gray-700 bg-gray-900/40 rounded-lg p-5">
+          <h3 className="text-white font-semibold mb-2">🔸 Query 2</h3>
+          <Input {...register("query2")} placeholder="e.g. Bitcoin, Inflation" />
+          <div className="mt-4 space-y-2">
+            <p className="text-sm text-gray-400">Platform</p>
+            <div className="flex gap-4">
+              <Radio {...register("platform2")} label="Reddit" value="reddit" />
+              <Radio {...register("platform2")} label="GNews" value="gnews" />
+              <Radio {...register("platform2")} label="Twitter" value="twitter" />
+            </div>
+            <p className="text-sm text-gray-400">Model</p>
+            <div className="flex gap-4">
+              <Radio {...register("model2")} label="VADER" value="vader" />
+              <Radio {...register("model2")} label="TextBlob" value="textblob" />
+              <Radio {...register("model2")} label="GenAI" value="genai" />
+            </div>
           </div>
         </div>
 
-        <div className="col-span-2 mt-4">
-          <Button type="submit" variant="primary">Compare</Button>
+        <div className="col-span-2 mt-2 text-center">
+          <Button type="submit" variant="primary" className="w-full md:w-auto">Compare</Button>
         </div>
       </form>
 
-      {(query1Data && query2Data) && (
+      {/* Results */}
+      {query1Data && query2Data && (
         <>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 my-8">
+          {/* Stat Cards */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <StatCard name='Total Posts (Q1)' icon={FileText} value={query1Data.total_posts || 0} color='#6366F1' />
             <StatCard name='Total Posts (Q2)' icon={FileText} value={query2Data.total_posts || 0} color='#6366F1' />
             <StatCard name='Sentiment (Q1)' icon={Smile} value={query1Data.average_sentiment || 0} color='#10B981' />
             <StatCard name='Sentiment (Q2)' icon={Smile} value={query2Data.average_sentiment || 0} color='#EC4899' />
           </div>
 
-          <ComparisonLineChart
-            data1={chartData1}
-            data2={chartData2}
-            label1={query1Data.search}
-            label2={query2Data.search}
-          />
+          {/* Charts */}
+          <div className="bg-gray-800 bg-opacity-50 rounded-xl shadow-md border border-gray-700 mb-8 p-4">
+            <h2 className="text-lg font-medium text-white mb-4">📈 Sentiment Over Time Comparison</h2>
+            <ComparisonLineChart
+              data1={chartData1}
+              data2={chartData2}
+              label1={query1Data.search}
+              label2={query2Data.search}
+            />
+          </div>
+
+          <div className="grid gap-6">
+            <TopicSharePie
+              sentimentDetails1={query1Data.sentiment_details || []}
+              sentimentDetails2={query2Data.sentiment_details || []}
+            />
+          </div>
         </>
       )}
     </div>

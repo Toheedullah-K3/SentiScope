@@ -15,6 +15,8 @@ import PostTimeline from "./PostTimeline.jsx";
 import TopKeywords from "./TopKeywords.jsx";
 import WordCloudChart from "./WordCloudChart.jsx";
 import ComparisonLineChart from "./ComparisonLineChart.jsx";
+import TopicSharePie from "./TopicSharePie.jsx";
+
 
 export { 
     Navbar,
@@ -33,7 +35,8 @@ export {
     PostTimeline,
     TopKeywords,
     WordCloudChart,
-    ComparisonLineChart
+    ComparisonLineChart,
+    TopicSharePie
 };
 
 
