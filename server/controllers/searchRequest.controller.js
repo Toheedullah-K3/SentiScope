@@ -103,8 +103,6 @@ const getSearchRequestById = async (req, res) => {
   }
 };
 
-
-
 const getSentimentOverTime = async (req, res) => {
   const { query, model, platform } = req.query;
 
@@ -148,8 +146,53 @@ const getSentimentOverTime = async (req, res) => {
   }
 };
 
+const getSearchRequestByUser = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const userSearches = await SearchRequest.find({ userId }).sort({ createdAt: -1 });
+
+    return res.status(200).json(userSearches);
+  } catch (error) {
+    console.error("Error fetching user search history:", error.message);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const deleteSearchById = async (req, res) => {
+  const { id } = req.query;
+  if (!id) {
+    return res.status(400).json({ error: "Missing search ID" });
+  }
+
+  try {
+    const searchRequest = await SearchRequest.findById(id);
+    if (!searchRequest) {
+      return res.status(404).json({ error: "Search not found" });
+    }
+
+    // Optional: check ownership
+    if (req.user?.id && searchRequest.userId.toString() !== req.user.id) {
+      return res.status(403).json({ error: "Forbidden – You don’t own this search" });
+    }
+
+    await SearchRequest.deleteOne({ _id: id });
+    await SearchResult.deleteMany({ searchRequestId: id });
+
+    return res.status(200).json({ message: "Search and associated results deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting search:", error.message);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export {
   getSearchRequest,
   getSearchRequestById,
-  getSentimentOverTime
+  getSentimentOverTime,
+  getSearchRequestByUser,
+  deleteSearchById
 };

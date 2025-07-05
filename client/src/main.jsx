@@ -19,7 +19,7 @@ import { AuthLayout } from './components/index.js'
 // Dashboard Pages
 import SearchAnalyze from './pages/DasboardNestedPages/SearchAnalyze.jsx'
 import CompareTrends from './pages/DasboardNestedPages/CompareTrends.jsx'
-
+import SavedAnalysis from './pages/DasboardNestedPages/SavedAnalysis.jsx'
 
 const routes = createRoutesFromElements(
   <Route element={<App />}>
@@ -77,6 +77,14 @@ const routes = createRoutesFromElements(
         element={
           <AuthLayout authentication>
             <CompareTrends />
+          </AuthLayout>
+        }
+      />
+      <Route
+        path='saved-analysis'
+        element={
+          <AuthLayout authentication>
+            <SavedAnalysis />
           </AuthLayout>
         }
       />

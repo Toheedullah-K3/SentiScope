@@ -94,7 +94,7 @@ const SearchAnalyze = () => {
   };
 
   return (
-    <>
+    <div className="overflow-x-hidden w-full">
       {/* Header */}
       <h1 className="text-3xl capitalize font-bold">Dashboard</h1>
       <h6 className="text-lime-500 text-sm font-bold">Welcome to your Dashboard</h6>
@@ -174,7 +174,7 @@ const SearchAnalyze = () => {
       <br />
 
       
-    </>
+    </div>
   );
 };
 

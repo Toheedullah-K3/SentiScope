@@ -45,7 +45,7 @@ const Dashboard = () => {
           hoverText= "History"
           active= {selected === "History & Saved Analysis"} 
           onClick={()=> {
-            navigate('') 
+            navigate('/dashboard/saved-analysis') 
             setSelected("History & Saved Analysis")
           }}
         />
