@@ -67,25 +67,19 @@ const routes = createRoutesFromElements(
       <Route
         path='sentiment-analysis'
         element={
-          <AuthLayout authentication>
             <SearchAnalyze />
-          </AuthLayout>
         }
       />
       <Route
         path='compare-trends'
         element={
-          <AuthLayout authentication>
             <CompareTrends />
-          </AuthLayout>
         }
       />
       <Route
         path='saved-analysis'
         element={
-          <AuthLayout authentication>
-            <SavedAnalysis />
-          </AuthLayout>
+            <SavedAnalysis />   
         }
       />
     </Route>
