@@ -9,6 +9,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 const HistoryAnalysis = () => {
   const [searches, setSearches] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [rerunLoadingId, setRerunLoadingId] = useState(null);
   const navigate = useNavigate();
 
   const fetchUserSearches = async () => {
@@ -19,7 +20,7 @@ const HistoryAnalysis = () => {
       });
       setSearches(response.data || []);
     } catch (err) {
-      console.error("Failed to load history", err);
+      console.error("❌ Failed to load search history:", err);
     } finally {
       setLoading(false);
     }
@@ -32,14 +33,32 @@ const HistoryAnalysis = () => {
         params: { id },
         withCredentials: true,
       });
-      setSearches(searches.filter(item => item._id !== id));
+      setSearches(prev => prev.filter(item => item._id !== id));
     } catch (err) {
-      console.error("Failed to delete record", err);
+      console.error("❌ Failed to delete search:", err);
     }
   };
 
-  const rerunSearch = (item) => {
-    navigate(`/dashboard/sentiment-analysis?id=${item._id}`);
+  const rerunSearch = async (item) => {
+    setRerunLoadingId(item._id);
+    try {
+      const response = await axios.get(`${apiUrl}/api/v1/search/getSearchRequest`, {
+        params: {
+          search: item.searchQuery,
+          model: item.model,
+          platform: item.platform,
+        },
+        withCredentials: true,
+      });
+
+      const newId = response.data.searchRequestId;
+      navigate(`/dashboard/sentiment-analysis?id=${newId}`);
+    } catch (err) {
+      console.error("❌ Failed to rerun analysis:", err);
+      alert("Error rerunning analysis.");
+    } finally {
+      setRerunLoadingId(null);
+    }
   };
 
   const viewSearch = (item) => {
@@ -47,8 +66,7 @@ const HistoryAnalysis = () => {
   };
 
   const editSearch = (item) => {
-    // Optional: open modal or redirect to editable form with pre-filled values
-    alert("Edit not implemented yet.");
+    alert("✏️ Edit feature not implemented yet.");
   };
 
   useEffect(() => {
@@ -58,6 +76,7 @@ const HistoryAnalysis = () => {
   return (
     <div className="px-6 py-8">
       <h1 className="text-2xl font-bold mb-4 text-white">🕘 History & Saved Analysis</h1>
+
       {loading ? (
         <p className="text-gray-400">Loading search history...</p>
       ) : searches.length === 0 ? (
@@ -77,21 +96,50 @@ const HistoryAnalysis = () => {
             <tbody>
               {searches.map((item) => (
                 <tr key={item._id} className="border-t border-gray-700">
-                  <td className="px-4 py-2 font-bold">{item.searchQuery}</td>
+                  <td className="px-4 py-2 font-semibold">{item.searchQuery}</td>
                   <td className="px-4 py-2">{item.platform}</td>
                   <td className="px-4 py-2">{item.model}</td>
                   <td className="px-4 py-2">{new Date(item.createdAt).toLocaleString()}</td>
                   <td className="px-4 py-2 flex flex-wrap gap-2">
-                    <Button onClick={() => viewSearch(item)} size="sm">
+                    {/* View Button */}
+                    <Button
+                      onClick={() => viewSearch(item)}
+                      size="sm"
+                      title="View previous results"
+                    >
                       <Eye className="w-4 h-4" />
                     </Button>
-                    <Button onClick={() => rerunSearch(item)} size="sm">
-                      <Repeat className="w-4 h-4" />
+
+                    {/* Rerun Button */}
+                    <Button
+                      onClick={() => rerunSearch(item)}
+                      size="sm"
+                      title="Rerun with fresh results"
+                      disabled={rerunLoadingId === item._id}
+                    >
+                      {rerunLoadingId === item._id ? (
+                        <span className="text-xs animate-pulse px-2">⏳ Fetching...</span>
+                      ) : (
+                        <Repeat className="w-4 h-4" />
+                      )}
                     </Button>
-                    <Button onClick={() => editSearch(item)} size="sm">
+
+                    {/* Edit Button */}
+                    <Button
+                      onClick={() => editSearch(item)}
+                      size="sm"
+                      title="Edit (coming soon)"
+                    >
                       <Edit2 className="w-4 h-4" />
                     </Button>
-                    <Button onClick={() => deleteSearch(item._id)} size="sm" variant="destructive">
+
+                    {/* Delete Button */}
+                    <Button
+                      onClick={() => deleteSearch(item._id)}
+                      size="sm"
+                      variant="destructive"
+                      title="Delete this record"
+                    >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </td>
