@@ -85,7 +85,7 @@ const Dashboard = () => {
           hoverText= "Help"
           active= {selected === "Help"} 
           onClick={()=> {
-            navigate('') 
+            navigate('/dashboard/help') 
             setSelected("Help")
           }}
         />
