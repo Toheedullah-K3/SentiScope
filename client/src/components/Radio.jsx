@@ -1,23 +1,34 @@
-import React from "react"
+import React from "react";
 
 const Radio = React.forwardRef(function Radio({
-    type = 'radio',
-    label,
-    name = "option",
-    className = '',
-    ...props
+  type = "radio",
+  label,
+  name = "option",
+  className = "",
+  ...props
 }, ref) {
-    return (
-        <div>
-            <label>
-                <input type={type} ref={ref} name={name} {...props} className="hidden peer" />
-                <div className={`
-                        flex items-center justify-center  h-10 px-10 rounded-full cursor-pointer border border-white/15 peer-checked:bg-lime-500 peer-checked:text-white 
-                            ${className}
-                    `}>{label}</div>
-            </label>
-        </div>
-    )
-})
+  return (
+    <label className="relative inline-block cursor-pointer select-none">
+      <input
+        type={type}
+        name={name}
+        ref={ref}
+        {...props}
+        className="peer hidden"
+      />
+      <div
+        className={`
+          px-6 py-2 text-sm font-medium rounded-full border
+          border-white/15 bg-white/5 text-gray-300
+          peer-checked:bg-gradient-to-tr peer-checked:from-lime-400 peer-checked:to-green-500 peer-checked:text-gray-900
+          hover:bg-white/10 transition duration-200
+          ${className}
+        `}
+      >
+        {label}
+      </div>
+    </label>
+  );
+});
 
-export default Radio
+export default Radio;

@@ -1,20 +1,18 @@
-import { Sidebar } from "@/components/index.js"
-import { Outlet } from "react-router-dom"
-
-
+import { Sidebar } from "@/components";
+import { Outlet } from "react-router-dom";
 
 const Dashboard = () => {
-
-
   return (
-    <div className="flex min-h-screen bg-gray-900">
+    <div className="flex min-h-screen w-full overflow-hidden">
+      {/* Sidebar (fixed width) */}
       <Sidebar />
 
-      <div className="flex-1 overflow-y-auto overflow-x-hidden p-6">
+      {/* Outlet content (full width, no unwanted padding) */}
+      <div className="flex-1 overflow-y-auto overflow-x-hidden">
         <Outlet />
       </div>
     </div>
-  )
-} 
+  );
+};
 
-export default Dashboard
+export default Dashboard;

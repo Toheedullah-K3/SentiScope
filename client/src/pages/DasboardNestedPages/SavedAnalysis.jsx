@@ -188,7 +188,7 @@ const HistoryAnalysis = () => {
                             </div>
 
                             {/* Filter Toggle */}
-                            <Button
+                            <button
                                 onClick={() => setShowFilters(!showFilters)}
                                 className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2 ${showFilters
                                         ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white'
@@ -197,11 +197,11 @@ const HistoryAnalysis = () => {
                             >
                                 <Filter className="w-5 h-5" />
                                 Filters
-                            </Button>
+                            </button>
 
                             {/* View Mode Toggle */}
                             <div className="flex bg-slate-700/50 rounded-xl p-1">
-                                <Button
+                                <button
                                     onClick={() => setViewMode("cards")}
                                     className={`px-4 py-2 rounded-lg transition-all duration-300 ${viewMode === "cards"
                                             ? 'bg-purple-600 text-white'
@@ -209,8 +209,8 @@ const HistoryAnalysis = () => {
                                         }`}
                                 >
                                     Cards
-                                </Button>
-                                <Button
+                                </button>
+                                <button
                                     onClick={() => setViewMode("table")}
                                     className={`px-4 py-2 rounded-lg transition-all duration-300 ${viewMode === "table"
                                             ? 'bg-purple-600 text-white'
@@ -218,7 +218,7 @@ const HistoryAnalysis = () => {
                                         }`}
                                 >
                                     Table
-                                </Button>
+                                </button>
                             </div>
                         </div>
 
@@ -292,9 +292,9 @@ const HistoryAnalysis = () => {
                                 ? "No results match your current filters."
                                 : "You haven't performed any sentiment analysis yet."}
                         </p>
-                        <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300">
+                        <button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300">
                             Start New Analysis
-                        </Button>
+                        </button>
                     </div>
                 ) : viewMode === "cards" ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -347,14 +347,14 @@ const HistoryAnalysis = () => {
 
                                 {/* Actions */}
                                 <div className="flex gap-2">
-                                    <Button
+                                    <button
                                         onClick={() => viewSearch(item)}
                                         className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2"
                                     >
                                         <Eye className="w-4 h-4" />
                                         View
-                                    </Button>
-                                    <Button
+                                    </button>
+                                    <button
                                         onClick={() => rerunSearch(item)}
                                         disabled={rerunLoadingId === item._id}
                                         className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -364,13 +364,13 @@ const HistoryAnalysis = () => {
                                         ) : (
                                             <Repeat className="w-4 h-4" />
                                         )}
-                                    </Button>
-                                    <Button
+                                    </button>
+                                    <button
                                         onClick={() => deleteSearch(item._id)}
                                         className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300"
                                     >
                                         <Trash2 className="w-4 h-4" />
-                                    </Button>
+                                    </button>
                                 </div>
                             </div>
                         ))}
@@ -427,14 +427,14 @@ const HistoryAnalysis = () => {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="flex gap-2">
-                                                    <Button
+                                                    <button
                                                         onClick={() => viewSearch(item)}
                                                         className="p-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
                                                         title="View Analysis"
                                                     >
                                                         <Eye className="w-4 h-4" />
-                                                    </Button>
-                                                    <Button
+                                                    </button>
+                                                    <button
                                                         onClick={() => rerunSearch(item)}
                                                         disabled={rerunLoadingId === item._id}
                                                         className="p-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-colors disabled:opacity-50"
@@ -445,14 +445,14 @@ const HistoryAnalysis = () => {
                                                         ) : (
                                                             <Repeat className="w-4 h-4" />
                                                         )}
-                                                    </Button>
-                                                    <Button
+                                                    </button>
+                                                    <button
                                                         onClick={() => deleteSearch(item._id)}
                                                         className="p-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
                                                         title="Delete Analysis"
                                                     >
                                                         <Trash2 className="w-4 h-4" />
-                                                    </Button>
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>

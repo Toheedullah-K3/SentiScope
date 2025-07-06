@@ -1,10 +1,12 @@
+// top imports unchanged
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { FileText, Smile, Globe, Brain } from 'lucide-react';
+import { FileText, Smile, Globe, Brain, Sparkles } from 'lucide-react';
 import { motion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
+// components unchanged
 import {
   SentimentOverTime,
   SentimentBreakdown,
@@ -55,7 +57,7 @@ const SearchAnalyze = () => {
         });
       } catch (error) {
         console.error("Error loading data on refresh:", error?.response?.data || error.message);
-        alert("The search data may no longer exist. Please try a new query.");
+        alert("Search data not found. Please run a new analysis.");
         navigate("/dashboard/sentiment-analysis");
       }
     };
@@ -93,113 +95,114 @@ const SearchAnalyze = () => {
   };
 
   return (
-    <div className="overflow-x-hidden w-full px-4 sm:px-6 lg:px-8">
-      {/* Header */}
-      <div className="pt-8">
-        <motion.h1
-          className="text-4xl font-extrabold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 text-transparent bg-clip-text"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          Search & Analyze
-        </motion.h1>
-        <p className="text-gray-400 text-sm font-medium mt-1">
-          Discover sentiment insights from live data sources.
-        </p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+      {/* Animated Blurred Backgrounds */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-500 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500 rounded-full blur-3xl animate-pulse delay-2000" />
       </div>
 
-      {/* Search Form */}
-      <motion.form
-        onSubmit={handleSubmit(createSearch)}
-        className="mt-8 space-y-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.7 }}
-      >
-        <div className="flex border border-white/10 rounded-xl bg-white/5 backdrop-blur-md p-4 max-w-2xl mx-auto shadow-lg">
-          <Input
-            stype="text"
-            placeholder="Analyze sentiment—Try 'AI' or 'Bitcoin'!"
-            className="outline-none px-4 flex-1 bg-transparent text-white placeholder:text-gray-400"
-            {...register('search')}
-          />
-          <Button type="submit" variant="primary" className="whitespace-nowrap h-10 ml-4">Search</Button>
+      <div className="relative z-10 px-6 py-8 max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-10">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+            Real-time Sentiment Analysis
+          </h1>
+          <p className="text-gray-300 mt-2">Run a search and visualize internet sentiment in real-time.</p>
         </div>
 
-        <div className="flex justify-center items-center gap-6 flex-wrap text-white">
-          <span className="text-sm text-gray-300">Select Platform:</span>
-          <Radio {...register("platform")} label="GNews Api" value="gnews" />
-          <Radio {...register("platform")} label="Reddit" value="reddit" />
-          <Radio {...register("platform")} label="Twitter" value="twitter" />
-        </div>
-
-        <div className="flex justify-center items-center gap-6 flex-wrap text-white">
-          <span className="text-sm text-gray-300">Select Model:</span>
-          <Radio {...register("model")} label="TextBlob" value="textblob" />
-          <Radio {...register("model")} label="Vader" value="vader" />
-          <Radio {...register("model")} label="GenAI" value="genai" />
-        </div>
-      </motion.form>
-
-      {/* Empty state */}
-      {!option.search && (
-        <motion.div
-          className="border border-dashed border-white/10 rounded-xl p-6 text-center text-white bg-white/5 backdrop-blur-md shadow-inner mt-12 mb-16 max-w-2xl mx-auto"
+        {/* Form Container */}
+        <motion.form
+          onSubmit={handleSubmit(createSearch)}
+          className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-400/30 shadow-xl space-y-6 mb-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
         >
-          <h2 className="text-xl font-semibold mb-2">🔍 Ready to Analyze?</h2>
-          <p className="text-gray-300 mb-2">
-            Enter a keyword, select a platform and model — and we’ll analyze it for you.
-          </p>
-          <p className="text-gray-400 text-sm">
-            Try: <span className="text-lime-400 font-medium">"Bitcoin"</span>, <span className="text-pink-400 font-medium">"AI"</span>, or <span className="text-blue-400 font-medium">"Elections"</span>.
-          </p>
-        </motion.div>
-      )}
+          <div className="flex gap-4 items-center">
+            <Input
+              placeholder="Try 'AI', 'Bitcoin', or 'Election'..."
+              className="flex-1 bg-slate-700/50 border border-purple-400/20 text-white placeholder-gray-400 px-4 py-3 rounded-xl focus:ring-2 focus:ring-purple-400"
+              {...register("search")}
+            />
+            <Button type="submit" className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-xl">
+              Analyze
+            </Button>
+          </div>
 
-      {/* Stat Cards */}
-      {option.search && (
-        <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 mt-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-        >
-          <StatCard name='Total Posts' icon={FileText} value={option.total_posts || 0} color='#6366F1' />
-          <StatCard name='Sentiment Score' icon={Smile} value={option.average_sentiment || 0} color='#8B5CF6' />
-          <StatCard name='Platform' icon={Globe} value={option.platform || "—"} color='#EC4899' />
-          <StatCard name='Model' icon={Brain} value={option.model || "—"} color='#10B981' />
-        </motion.div>
-      )}
+          <div className="flex flex-wrap gap-6 text-sm text-white">
+            <div className="flex items-center gap-4">
+              <span className="text-gray-300">Platform:</span>
+              <Radio {...register("platform")} label="GNews" value="gnews" />
+              <Radio {...register("platform")} label="Reddit" value="reddit" />
+              <Radio {...register("platform")} label="Twitter" value="twitter" />
+            </div>
 
-      {/* Visual Insight Section */}
-      {option.search && (
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
-          <SentimentOverTime query={option.search} model={option.model} platform={option.platform} />
-          <SentimentBreakdown sentimentDetails={option.sentiment_details || []} />
-          <WordCloudChart sentimentDetails={option.sentiment_details || []} />
-          <TopKeywords sentimentDetails={option.sentiment_details || []} />
-        </motion.div>
-      )}
+            <div className="flex items-center gap-4">
+              <span className="text-gray-300">Model:</span>
+              <Radio {...register("model")} label="TextBlob" value="textblob" />
+              <Radio {...register("model")} label="VADER" value="vader" />
+              <Radio {...register("model")} label="GenAI" value="genai" />
+            </div>
+          </div>
+        </motion.form>
 
-      {/* Timeline */}
-      {option.search && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <PostTimeline sentimentDetails={option.sentiment_details || []} />
-        </motion.div>
-      )}
+        {/* Empty State */}
+        {!option.search && (
+          <div className="text-center border border-dashed border-purple-400/30 rounded-xl bg-slate-800/50 p-10 mt-12 shadow-xl">
+            <h2 className="text-2xl font-bold text-white mb-2">🔍 Ready to Analyze?</h2>
+            <p className="text-gray-300">
+              Enter a topic, select a platform and sentiment model to analyze trending discussions.
+            </p>
+          </div>
+        )}
+
+        {/* Stat Cards */}
+        {option.search && (
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <StatCard name="Total Posts" icon={FileText} value={option.total_posts || 0} color="#6366F1" />
+            <StatCard name="Sentiment Score" icon={Smile} value={option.average_sentiment || 0} color="#8B5CF6" />
+            <StatCard name="Platform" icon={Globe} value={option.platform || "—"} color="#EC4899" />
+            <StatCard name="Model" icon={Brain} value={option.model || "—"} color="#10B981" />
+          </motion.div>
+        )}
+
+        {/* Insights */}
+        {option.search && (
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.9 }}
+          >
+            <SentimentOverTime
+              query={option.search}
+              model={option.model}
+              platform={option.platform}
+            />
+            <SentimentBreakdown sentimentDetails={option.sentiment_details || []} />
+            <WordCloudChart sentimentDetails={option.sentiment_details || []} />
+            <TopKeywords sentimentDetails={option.sentiment_details || []} />
+          </motion.div>
+        )}
+
+        {/* Timeline */}
+        {option.search && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            <PostTimeline sentimentDetails={option.sentiment_details || []} />
+          </motion.div>
+        )}
+      </div>
     </div>
   );
 };
