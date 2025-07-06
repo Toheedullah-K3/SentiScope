@@ -16,7 +16,7 @@ import TopKeywords from "./TopKeywords.jsx";
 import WordCloudChart from "./WordCloudChart.jsx";
 import ComparisonLineChart from "./ComparisonLineChart.jsx";
 import TopicSharePie from "./TopicSharePie.jsx";
-
+import Accordion from "./Accordion.jsx";
 
 export { 
     Navbar,
@@ -36,7 +36,8 @@ export {
     TopKeywords,
     WordCloudChart,
     ComparisonLineChart,
-    TopicSharePie
+    TopicSharePie,
+    Accordion
 };
 
 
