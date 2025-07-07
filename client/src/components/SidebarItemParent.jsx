@@ -31,7 +31,7 @@ const Sidebar = ({ children }) => {
         {/* Bottom User Info */}
         <div className="border-t border-purple-500/20 flex p-3">
           <img
-            src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true"
+            src="https://ui-avatars.com/api/?name=Toheed+Khan&background=c7d2fe&color=3730a3&bold=true"
             alt="User"
             className="w-10 h-10 rounded-md"
           />
@@ -39,8 +39,8 @@ const Sidebar = ({ children }) => {
             className={`flex justify-between items-center overflow-hidden transition-all duration-300 ${expanded ? "w-52 ml-3" : "w-0"}`}
           >
             <div className="leading-4">
-              <h4 className="font-semibold text-white">John Doe</h4>
-              <span className="text-xs text-gray-400">johndoe@gmail.com</span>
+              <h4 className="font-semibold text-white">Toheed Ullah</h4>
+              <span className="text-xs text-gray-400">toheedullah002@gmail.com</span>
             </div>
             <MoreVertical size={20} className="text-gray-400" />
           </div>

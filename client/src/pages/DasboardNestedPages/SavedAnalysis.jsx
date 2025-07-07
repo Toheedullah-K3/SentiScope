@@ -4,7 +4,7 @@ import {
     Trash2, Eye, Repeat, RefreshCw, AlertCircle,
     CheckCircle, XCircle, Archive, Brain, Sparkles,
     BarChart3, Globe, Filter, Search, TrendingUp,
-    Settings
+    Settings, Clock, RotateCcw, Info
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components";
@@ -22,6 +22,7 @@ const HistoryAnalysis = () => {
     const [sortBy, setSortBy] = useState("date"); // Default sort by date
     const [viewMode, setViewMode] = useState("cards");
     const [showFilters, setShowFilters] = useState(false);
+    const [flippedCards, setFlippedCards] = useState(new Set());
 
     const navigate = useNavigate();
 
@@ -117,13 +118,39 @@ const HistoryAnalysis = () => {
         return "from-red-600/20 to-pink-600/20";
     };
 
-    const getStatusIcon = (status) => {
-        switch (status) {
-            case "completed": return <CheckCircle className="w-5 h-5 text-green-400" />;
-            case "processing": return <RefreshCw className="w-5 h-5 text-blue-400 animate-spin" />;
-            case "failed": return <XCircle className="w-5 h-5 text-red-400" />;
-            default: return <AlertCircle className="w-5 h-5 text-gray-400" />;
+    const toggleCardFlip = (cardId) => {
+        setFlippedCards(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(cardId)) {
+                newSet.delete(cardId);
+            } else {
+                newSet.add(cardId);
+            }
+            return newSet;
+        });
+    };
+
+    const getDataStatusIcon = (item) => {
+        // Check if we have sentiment data
+        if (typeof item.averageSentimentScore === "number" && item.totalPosts > 0) {
+            return <CheckCircle className="w-5 h-5 text-green-400" />;
         }
+        // Check if we have partial data
+        if (item.totalPosts > 0 || typeof item.averageSentimentScore === "number") {
+            return <AlertCircle className="w-5 h-5 text-yellow-400" />;
+        }
+        // No data available
+        return <XCircle className="w-5 h-5 text-red-400" />;
+    };
+
+    const getDataStatusText = (item) => {
+        if (typeof item.averageSentimentScore === "number" && item.totalPosts > 0) {
+            return "Complete";
+        }
+        if (item.totalPosts > 0 || typeof item.averageSentimentScore === "number") {
+            return "Partial";
+        }
+        return "No Data";
     };
 
     const getModelIcon = (model) => {
@@ -150,6 +177,20 @@ const HistoryAnalysis = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+            <style jsx>{`
+                .perspective-1000 {
+                    perspective: 1000px;
+                }
+                .transform-style-preserve-3d {
+                    transform-style: preserve-3d;
+                }
+                .backface-hidden {
+                    backface-visibility: hidden;
+                }
+                .rotate-y-180 {
+                    transform: rotateY(180deg);
+                }
+            `}</style>
             {/* Animated Background */}
             <div className="absolute inset-0 opacity-20">
                 <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500 rounded-full blur-3xl animate-pulse"></div>
@@ -301,76 +342,156 @@ const HistoryAnalysis = () => {
                         {filteredSearches.map((item) => (
                             <div
                                 key={item._id}
-                                className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-400/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                                className="relative h-[340px] w-full perspective-1000"
                             >
-                                {/* Card Header */}
-                                <div className="flex items-start justify-between mb-4">
-                                    <div className="flex items-center gap-3">
-                                        {getPlatformIcon(item.platform)}
-                                        <div>
-                                            <h3 className="text-lg font-bold text-white truncate">{item.searchQuery}</h3>
-                                            <p className="text-sm text-gray-400">{new Date(item.createdAt).toLocaleDateString()}</p>
+                                <div className={`relative w-full h-full transition-transform duration-700 transform-style-preserve-3d ${flippedCards.has(item._id) ? 'rotate-y-180' : ''}`}>
+                                    {/* Front Side */}
+                                    <div className="absolute inset-0 backface-hidden bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-400/30 shadow-xl hover:shadow-2xl transition-all duration-300">
+                                        {/* Card Header */}
+                                        <div className="flex items-start justify-between mb-4">
+                                            <div className="flex items-center gap-3">
+                                                {getPlatformIcon(item.platform)}
+                                                <div>
+                                                    <h3 className="text-lg font-bold text-white truncate">{item.searchQuery}</h3>
+                                                    <p className="text-sm text-gray-400">{new Date(item.createdAt).toLocaleDateString()}</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => toggleCardFlip(item._id)}
+                                                className="p-2 bg-purple-600/30 hover:bg-purple-600/50 rounded-lg transition-all duration-300 group"
+                                                title="View Details"
+                                            >
+                                                <Info className="w-5 h-5 text-purple-400 group-hover:text-purple-300" />
+                                            </button>
+                                        </div>
+
+                                        {/* Sentiment Score */}
+                                        <div className={`bg-gradient-to-r ${getSentimentBg(item.averageSentimentScore)} rounded-xl p-4 mb-4`}>
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <p className="text-sm text-gray-300">Sentiment Score</p>
+                                                    <p className={`text-2xl font-bold ${getSentimentColor(item.averageSentimentScore)}`}>
+                                                        {typeof item.averageSentimentScore === "number"
+                                                            ? `${item.averageSentimentScore > 0 ? '+' : ''}${item.averageSentimentScore.toFixed(2)}`
+                                                            : 'N/A'}
+                                                    </p>
+                                                </div>
+                                                <TrendingUp className={`w-8 h-8 ${getSentimentColor(item.averageSentimentScore)}`} />
+                                            </div>
+                                        </div>
+
+                                        {/* Stats */}
+                                        <div className="grid grid-cols-2 gap-4 mb-4">
+                                            <div className="bg-slate-700/30 rounded-lg p-3">
+                                                <p className="text-sm text-gray-400">Posts</p>
+                                                <p className="text-lg font-bold text-white">{item.totalPosts?.toLocaleString() || 'N/A'}</p>
+                                            </div>
+                                            <div className="bg-slate-700/30 rounded-lg p-3 flex items-center gap-2">
+                                                {getModelIcon(item.model)}
+                                                <div>
+                                                    <p className="text-sm text-gray-400">Model</p>
+                                                    <p className="text-sm font-bold text-white">{item.model}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Actions */}
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => viewSearch(item)}
+                                                className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2"
+                                            >
+                                                <Eye className="w-4 h-4" />
+                                                View
+                                            </button>
+                                            <button
+                                                onClick={() => rerunSearch(item)}
+                                                disabled={rerunLoadingId === item._id}
+                                                className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                            >
+                                                {rerunLoadingId === item._id ? (
+                                                    <RefreshCw className="w-4 h-4 animate-spin" />
+                                                ) : (
+                                                    <Repeat className="w-4 h-4" />
+                                                )}
+                                            </button>
+                                            <button
+                                                onClick={() => deleteSearch(item._id)}
+                                                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
                                         </div>
                                     </div>
-                                    {getStatusIcon(item.status)}
-                                </div>
 
-                                {/* Sentiment Score */}
-                                <div className={`bg-gradient-to-r ${getSentimentBg(item.averageSentimentScore)} rounded-xl p-4 mb-4`}>
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <p className="text-sm text-gray-300">Sentiment Score</p>
-                                            <p className={`text-2xl font-bold ${getSentimentColor(item.averageSentimentScore)}`}>
-                                                {typeof item.averageSentimentScore === "number"
-                                                    ? `${item.averageSentimentScore > 0 ? '+' : ''}${item.averageSentimentScore.toFixed(2)}`
-                                                    : 'N/A'}
-                                            </p>
+                                    {/* Back Side */}
+                                    <div className="absolute inset-0 backface-hidden rotate-y-180 bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-400/30 shadow-xl">
+                                        {/* Back Header */}
+                                        <div className="flex items-start justify-between mb-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="p-2 bg-purple-600/30 rounded-lg">
+                                                    <BarChart3 className="w-5 h-5 text-purple-400" />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-lg font-bold text-white">Analysis Details</h3>
+                                                    <p className="text-sm text-gray-400">Extended Information</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => toggleCardFlip(item._id)}
+                                                className="p-2 bg-purple-600/30 hover:bg-purple-600/50 rounded-lg transition-all duration-300 group"
+                                                title="Back to Overview"
+                                            >
+                                                <RotateCcw className="w-5 h-5 text-purple-400 group-hover:text-purple-300" />
+                                            </button>
                                         </div>
-                                        <TrendingUp className={`w-8 h-8 ${getSentimentColor(item.averageSentimentScore)}`} />
-                                    </div>
-                                </div>
 
-                                {/* Stats */}
-                                <div className="grid grid-cols-2 gap-4 mb-4">
-                                    <div className="bg-slate-700/30 rounded-lg p-3">
-                                        <p className="text-sm text-gray-400">Posts</p>
-                                        <p className="text-lg font-bold text-white">{item.totalPosts?.toLocaleString() || 'N/A'}</p>
-                                    </div>
-                                    <div className="bg-slate-700/30 rounded-lg p-3 flex items-center gap-2">
-                                        {getModelIcon(item.model)}
-                                        <div>
-                                            <p className="text-sm text-gray-400">Model</p>
-                                            <p className="text-sm font-bold text-white">{item.model}</p>
+                                        {/* Detailed Stats */}
+                                        <div className="space-y-3 mb-4">
+                                            
+                                            
+                                            <div className="bg-slate-700/30 rounded-lg p-3">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-sm text-gray-400">Platform</span>
+                                                    <div className="flex items-center gap-2">
+                                                        {getPlatformIcon(item.platform)}
+                                                        <span className="text-sm font-semibold text-white capitalize">{item.platform}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="bg-slate-700/30 rounded-lg p-3">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-sm text-gray-400">Analysis Model</span>
+                                                    <div className="flex items-center gap-2">
+                                                        {getModelIcon(item.model)}
+                                                        <span className="text-sm font-semibold text-white">{item.model}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div className="bg-slate-700/30 rounded-lg p-3">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-sm text-gray-400">Created</span>
+                                                    <span className="text-sm font-semibold text-white">
+                                                        {new Date(item.createdAt).toLocaleDateString()} at {new Date(item.createdAt).toLocaleTimeString()}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Back Actions */}
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => viewSearch(item)}
+                                                className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2"
+                                            >
+                                                <Eye className="w-4 h-4" />
+                                                View Full Analysis
+                                            </button>
                                         </div>
                                     </div>
-                                </div>
-
-                                {/* Actions */}
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={() => viewSearch(item)}
-                                        className="flex-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2"
-                                    >
-                                        <Eye className="w-4 h-4" />
-                                        View
-                                    </button>
-                                    <button
-                                        onClick={() => rerunSearch(item)}
-                                        disabled={rerunLoadingId === item._id}
-                                        className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        {rerunLoadingId === item._id ? (
-                                            <RefreshCw className="w-4 h-4 animate-spin" />
-                                        ) : (
-                                            <Repeat className="w-4 h-4" />
-                                        )}
-                                    </button>
-                                    <button
-                                        onClick={() => deleteSearch(item._id)}
-                                        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
                                 </div>
                             </div>
                         ))}
@@ -388,7 +509,7 @@ const HistoryAnalysis = () => {
                                         <th className="px-6 py-4 text-left font-semibold">Sentiment</th>
                                         <th className="px-6 py-4 text-left font-semibold">Posts</th>
                                         <th className="px-6 py-4 text-left font-semibold">Date</th>
-                                        <th className="px-6 py-4 text-left font-semibold">Status</th>
+                                        <th className="px-6 py-4 text-left font-semibold">Data Status</th>
                                         <th className="px-6 py-4 text-left font-semibold">Actions</th>
                                     </tr>
                                 </thead>
@@ -421,8 +542,8 @@ const HistoryAnalysis = () => {
                                             <td className="px-6 py-4 text-gray-300">{new Date(item.createdAt).toLocaleDateString()}</td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-2">
-                                                    {getStatusIcon(item.status)}
-                                                    <span className="text-gray-300 capitalize">{item.status}</span>
+                                                    {getDataStatusIcon(item)}
+                                                    <span className="text-gray-300">{getDataStatusText(item)}</span>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
