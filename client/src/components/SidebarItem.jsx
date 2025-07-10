@@ -27,11 +27,9 @@ const SidebarItem = ({ icon, text, hoverText, active, alert, onClick }) => {
         >
           {text}
         </span>
-        {alert && (
-          <div className={`absolute right-2 w-2 h-2 rounded-full bg-lime-400 ${expanded ? "" : "top-2"}`} />
-        )}
+
         {!expanded && (
-          <div className="absolute left-full rounded-md px-2 py-1 ml-6 bg-lime-400 text-gray-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0">
+          <div className="absolute left-full top-1/2 -translate-y-1/2 z-50 whitespace-nowrap rounded-md px-2 py-1 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-sm invisible opacity-0 translate-x-[30px] transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-[5px]">
             {hoverText}
           </div>
         )}

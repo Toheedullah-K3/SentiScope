@@ -57,7 +57,6 @@ const Dashboard = () => {
         text="Sentiments"
         hoverText="Sentiments"
         active={selected === "Sentiments"}
-        alert
         onClick={() => {
           navigate("");
           setSelected("Sentiments");
