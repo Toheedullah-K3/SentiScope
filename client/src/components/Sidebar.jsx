@@ -68,7 +68,7 @@ const Dashboard = () => {
         hoverText="Cluster"
         active={selected === "Cluster"}
         onClick={() => {
-          navigate("");
+          navigate("/dashboard/cluster-analysis");
           setSelected("Cluster");
         }}
       />

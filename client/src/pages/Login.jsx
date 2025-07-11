@@ -35,7 +35,7 @@ const Login = () => {
 
       if (response.status === 200) {
         dispatch(authLogin(userData))
-        navigate('/dashboard')
+        navigate('/dashboard/sentiment-analysis')
     }
   
       

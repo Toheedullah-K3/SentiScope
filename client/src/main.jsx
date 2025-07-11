@@ -21,7 +21,7 @@ import SearchAnalyze from './pages/DasboardNestedPages/SearchAnalyze.jsx'
 import CompareTrends from './pages/DasboardNestedPages/CompareTrends.jsx'
 import SavedAnalysis from './pages/DasboardNestedPages/SavedAnalysis.jsx'
 import HelpPage from './pages/DasboardNestedPages/HelpPage'
-
+import ClusterAnalysis from './pages/DasboardNestedPages/ClusterAnalysis.jsx'
 
 const routes = createRoutesFromElements(
   <Route element={<App />}>
@@ -82,6 +82,12 @@ const routes = createRoutesFromElements(
         path='saved-analysis'
         element={
             <SavedAnalysis />   
+        }
+      />
+      <Route
+        path='cluster-analysis'
+        element={
+          <ClusterAnalysis />
         }
       />
       <Route
