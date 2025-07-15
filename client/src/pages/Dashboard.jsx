@@ -3,9 +3,14 @@ import { Outlet } from "react-router-dom";
 
 const Dashboard = () => {
   return (
-    <div className="flex min-h-screen w-full overflow-x-visible relative">
-      <Sidebar />
-      <div className="flex-1 overflow-y-auto overflow-x-visible sm:ml-64 md:ml-0">
+    <div className="flex w-full h-screen overflow-hidden">
+      {/* Fixed Sidebar */}
+      <div className="fixed top-0 left-0 h-full z-40 w-64 hidden md:block">
+        <Sidebar />
+      </div>
+
+      {/* Scrollable Content */}
+      <div className="flex-1 ml-0 md:ml-64 overflow-y-auto overflow-x-visible h-full">
         <Outlet />
       </div>
     </div>
