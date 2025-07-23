@@ -5,7 +5,8 @@ import requests
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import openai
-from datetime import datetime
+from datetime import datetime, timezone
+
 
 import praw
 from dotenv import load_dotenv
@@ -196,7 +197,7 @@ def analyze_sentiment():
 
             # Convert timestamp into date string
             if platform == 'reddit':
-                date_str = datetime.utcfromtimestamp(raw_time).strftime('%Y-%m-%d')
+                date_str = datetime.fromtimestamp(raw_time, tz=timezone.utc).strftime('%Y-%m-%d')
             elif platform == 'gnews':
                 from dateutil import parser
                 date_str = parser.parse(raw_time).strftime('%Y-%m-%d')

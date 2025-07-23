@@ -9,6 +9,7 @@ const Sidebar = ({ children }) => {
 
   return (
     <>
+    
       {/* Hamburger button (only on small screens) */}
       <button
         onClick={() => setVisible(!visible)}

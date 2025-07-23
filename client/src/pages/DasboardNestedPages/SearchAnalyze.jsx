@@ -1,12 +1,9 @@
-// top imports unchanged
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { FileText, Smile, Globe, Brain, Sparkles, BarChart3 } from 'lucide-react';
 import { motion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
-
-// components unchanged
 import {
   SentimentOverTime,
   SentimentBreakdown,
