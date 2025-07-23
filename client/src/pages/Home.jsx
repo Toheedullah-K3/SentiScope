@@ -219,108 +219,7 @@ const InteractiveStats = () => {
   );
 };
 
-const LiveAnalysisPreview = () => {
-  const [isLive, setIsLive] = useState(false);
-  const [currentData, setCurrentData] = useState({
-    positive: 45,
-    negative: 25,
-    neutral: 30,
-    totalPosts: 1247
-  });
 
-  useEffect(() => {
-    if (isLive) {
-      const interval = setInterval(() => {
-        setCurrentData(prev => ({
-          positive: Math.max(0, Math.min(100, prev.positive + (Math.random() - 0.5) * 10)),
-          negative: Math.max(0, Math.min(100, prev.negative + (Math.random() - 0.5) * 8)),
-          neutral: Math.max(0, Math.min(100, prev.neutral + (Math.random() - 0.5) * 6)),
-          totalPosts: prev.totalPosts + Math.floor(Math.random() * 5)
-        }));
-      }, 1500);
-      
-      return () => clearInterval(interval);
-    }
-  }, [isLive]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      className="bg-slate-800/40 backdrop-blur-sm border border-purple-400/20 rounded-2xl p-6 mb-16"
-    >
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-white flex items-center gap-2">
-          <Activity className="w-5 h-5 text-purple-400" />
-          Live Analysis Preview
-        </h3>
-        <Button
-          variant={isLive ? "outline" : "primary"}
-          className="text-sm px-4 py-2"
-          onClick={() => setIsLive(!isLive)}
-        >
-          {isLive ? "Stop Live" : "Start Live"}
-        </Button>
-      </div>
-      
-      <div className="grid md:grid-cols-2 gap-6">
-        <div>
-          <div className="flex items-center gap-2 mb-4">
-            <div className={`w-3 h-3 rounded-full ${isLive ? 'bg-green-400 animate-pulse' : 'bg-gray-400'}`}></div>
-            <span className="text-sm text-gray-300">
-              {isLive ? "Live Analysis" : "Demo Mode"} • {currentData.totalPosts} posts
-            </span>
-          </div>
-          
-          <div className="space-y-3">
-            {[
-              { label: "Positive", value: currentData.positive, color: "bg-green-500" },
-              { label: "Neutral", value: currentData.neutral, color: "bg-yellow-500" },
-              { label: "Negative", value: currentData.negative, color: "bg-red-500" }
-            ].map((item) => (
-              <div key={item.label} className="flex items-center gap-3">
-                <span className="text-sm text-gray-300 w-16">{item.label}</span>
-                <div className="flex-1 bg-slate-700 rounded-full h-2">
-                  <motion.div
-                    className={`${item.color} h-2 rounded-full`}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${item.value}%` }}
-                    transition={{ duration: 0.5 }}
-                  />
-                </div>
-                <span className="text-sm text-white w-12">{Math.round(item.value)}%</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        <div className="bg-slate-700/30 rounded-xl p-4">
-          <h4 className="text-sm font-medium text-purple-300 mb-3">Recent Insights</h4>
-          <div className="space-y-2 text-xs text-gray-400">
-            <motion.div
-              key={currentData.totalPosts}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-2"
-            >
-              <div className="w-1 h-1 bg-purple-400 rounded-full"></div>
-              {isLive ? "New sentiment spike detected in trending topics" : "Click 'Start Live' to see real insights"}
-            </motion.div>
-            <div className="flex items-center gap-2">
-              <div className="w-1 h-1 bg-cyan-400 rounded-full"></div>
-              Analyzing cross-platform sentiment patterns
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-1 h-1 bg-pink-400 rounded-full"></div>
-              ML confidence: 94.2% accuracy maintained
-            </div>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-};
 
 const Home = () => {
   const [currentPlatform, setCurrentPlatform] = useState(0);
@@ -548,8 +447,7 @@ const Home = () => {
             {/* Interactive Stats */}
             <InteractiveStats />
 
-            {/* Live Analysis Preview */}
-            <LiveAnalysisPreview />
+
           </div>
         </section>
 
@@ -610,42 +508,22 @@ const Home = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
-              className="bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-xl border border-purple-400/30 rounded-3xl p-12 relative overflow-hidden"
+              className="bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-xl border border-purple-400/30 rounded-3xl p-12"
             >
-              {/* Animated background elements */}
-              <div className="absolute inset-0 opacity-10">
-                <motion.div
-                  className="absolute top-0 left-0 w-32 h-32 bg-purple-500 rounded-full blur-2xl"
-                  animate={{ x: [0, 100, 0], y: [0, 50, 0] }}
-                  transition={{ duration: 8, repeat: Infinity }}
-                />
-                <motion.div
-                  className="absolute bottom-0 right-0 w-32 h-32 bg-cyan-500 rounded-full blur-2xl"
-                  animate={{ x: [0, -100, 0], y: [0, -50, 0] }}
-                  transition={{ duration: 8, repeat: Infinity, delay: 4 }}
-                />
-              </div>
-              
-              <motion.h2
-                className="text-4xl md:text-5xl font-bold text-white mb-6 relative z-10"
-                whileHover={{ scale: 1.05 }}
-              >
-                Ready to <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">Transform Your Insights?</span>
-              </motion.h2>
-              <p className="text-lg text-gray-300 mb-8 relative z-10">
-                Join thousands of businesses and researchers leveraging AI to uncover actionable insights from social media.
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Ready to <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">Decode</span> the Internet?
+              </h2>
+              <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Join thousands of businesses and researchers using SentiScope to make data-driven decisions
               </p>
-              <Button
-                variant="primary"
-                className="text-lg px-8 py-3 relative z-10"
-                onClick={() => setShowLiveDemo(true)}
-              >
-                Start Free Trial
-              </Button>
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                initial={false}
-              />
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button className="text-lg px-8 py-4">
+                  Start Analyzing <ArrowRight className="w-5 h-5" />
+                </Button>
+                <Button variant="outline" className="text-lg px-8 py-4">
+                  <Play className="w-5 h-5" /> Watch Demo
+                </Button>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -661,5 +539,5 @@ const Home = () => {
     </div>
   );
 };
-export { Home, Button, TypewriterText, LiveSearchDemo, InteractiveStats, LiveAnalysisPreview };
+export { Home, Button, TypewriterText, LiveSearchDemo, InteractiveStats };
 export default Home;
