@@ -17,8 +17,8 @@ const Dashboard = () => {
         {/* Main Content */}
         <div
           className={`flex-1 overflow-y-auto h-full transition-all duration-300 ${
-            expanded ? "ml-64" : "ml-16"
-          }`}
+            expanded ? "lg:ml-64" : "lg:ml-16"
+          }`} 
         >
           <Outlet />
         </div>

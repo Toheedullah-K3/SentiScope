@@ -4,6 +4,7 @@ import { Menu, X, Brain, User, LogOut, TrendingUp, Activity, Home, Info, Sparkle
 import { Button, LogoutBtn } from '../index.js';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { SidebarContext } from '../SidebarItemParent.jsx';
 
 const NavLink = ({ to, children, className, isActive, onClick }) => (
   <Link
@@ -19,8 +20,8 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState('/');
+  const [expanded, setExpanded] = useState(true); 
   
-  const navigate = useNavigate();
   const location = useLocation();
   const authStatus = useSelector((state) => state.auth.status);
   
@@ -53,7 +54,7 @@ const Navbar = () => {
   // Landing Page Navbar (unchanged)
   if (!isDashboard) {
     return (
-      <>
+      <SidebarContext.Provider value={{ expanded, setExpanded }}>
         <motion.nav
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -294,18 +295,20 @@ const Navbar = () => {
           </AnimatePresence>
         </motion.nav>
         <div className="h-20 lg:h-24"></div>
-      </>
+      </SidebarContext.Provider>
     );
   }
 
-  // Dashboard Top Bar - Simplified and positioned correctly
+  // Dashboard Top Bar - Fixed positioning based on expanded state
   return (
-    <>
+    <SidebarContext.Provider value={{ expanded, setExpanded }}>
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="fixed top-0 left-0 md:left-64 right-0 z-30 bg-slate-800/95 backdrop-blur-md border-b border-slate-700/50 h-16"
+        className={`fixed top-0 right-0 z-30 bg-slate-800/95 backdrop-blur-md border-b border-slate-700/50 h-16 transition-all duration-300
+                ${expanded ? 'left-0 md:left-64' : 'left-0 md:left-20'}
+            `}
       >
         <div className="flex items-center justify-between h-full px-4 sm:px-6">
           
@@ -421,7 +424,7 @@ const Navbar = () => {
 
       {/* Dashboard Top Bar Spacer */}
       <div className="h-16"></div>
-    </>
+    </SidebarContext.Provider>
   );
 };
 
