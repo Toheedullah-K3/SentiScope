@@ -1,19 +1,29 @@
 import { Sidebar } from "@/components";
 import { Outlet } from "react-router-dom";
+import { SidebarContext } from "@/components/SidebarItemParent"; 
+import { useState } from "react";
 
 const Dashboard = () => {
-  return (
-    <div className="flex w-full h-screen overflow-hidden">
-      {/* Fixed Sidebar */}
-      <div className="fixed top-0 left-0 h-full z-40 w-64 hidden md:block">
-        <Sidebar />
-      </div>
+  const [expanded, setExpanded] = useState(true); 
 
-      {/* Scrollable Content */}
-      <div className="flex-1 ml-0 md:ml-64 overflow-y-auto overflow-x-visible h-full">
-        <Outlet />
+  return (
+    <SidebarContext.Provider value={{ expanded, setExpanded }}>
+      <div className="flex w-full h-screen overflow-hidden">
+        {/* Fixed Sidebar */}
+        <div className="fixed top-0 left-0 h-full z-40 hidden md:block transition-all duration-300">
+          <Sidebar />
+        </div>
+
+        {/* Main Content */}
+        <div
+          className={`flex-1 overflow-y-auto h-full transition-all duration-300 ${
+            expanded ? "ml-64" : "ml-16"
+          }`}
+        >
+          <Outlet />
+        </div>
       </div>
-    </div>
+    </SidebarContext.Provider>
   );
 };
 

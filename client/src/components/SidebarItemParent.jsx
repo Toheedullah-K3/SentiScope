@@ -1,10 +1,11 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { ChevronFirst, ChevronLast, MoreVertical, Menu } from "lucide-react";
+
 
 export const SidebarContext = createContext();
 
 const Sidebar = ({ children }) => {
-  const [expanded, setExpanded] = useState(true);
+  const { expanded, setExpanded } = useContext(SidebarContext);
   const [visible, setVisible] = useState(false); // For mobile toggle
 
   return (
@@ -21,16 +22,17 @@ const Sidebar = ({ children }) => {
       <aside
         className={`h-screen fixed z-40 transition-transform duration-300 md:relative
           ${visible ? "translate-x-0" : "-translate-x-full"}
+          ${expanded ? "w-64" : "w-16"} transition-all duration-300
           md:translate-x-0 md:flex`}
       >
-        <nav className="relative h-full flex flex-col bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 border-r border-purple-500/30 shadow-xl backdrop-blur-md overflow-visible w-64">
+        <nav className={`relative h-full flex flex-col bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 border-r border-purple-500/30 shadow-xl backdrop-blur-md overflow-visible `}>
           {/* Top Logo and Toggle */}
           <div className="p-4 pb-2 flex justify-between items-center">
             <h1
               className={`text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 transition-all duration-300 ${expanded ? "w-52" : "w-0"}`}
             >
               SentiScope
-            </h1>
+            </h1> 
             <button
               onClick={() => setExpanded((curr) => !curr)}
               className="p-1.5 mx-auto rounded-lg text-gray-300 hover:bg-gradient-to-r hover:from-purple-600 hover:to-indigo-600 hover:text-white transition hidden md:block"
