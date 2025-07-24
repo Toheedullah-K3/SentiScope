@@ -1,32 +1,14 @@
-const Button = ({
-  children,
-  type = "submit",
-  variant = "primary",
-  className = "",
-  ...otherProps
-}) => {
-  const baseStyles =
-    "px-6 py-2 rounded-full font-medium cursor-pointer transition duration-300 shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2";
-
-  const variantStyle = {
-    primary:
-      "bg-gradient-to-tr from-lime-400 to-green-500 text-neutral-900 hover:from-green-400 hover:to-lime-500 hover:shadow-lg",
-    secondary:
-      "border border-white text-white bg-transparent hover:bg-white/10",
-    danger:
-      "bg-red-600 text-white border border-red-600 hover:bg-red-700",
-    glass:
-      "bg-white/10 border border-white/20 backdrop-blur-md text-white hover:bg-white/20 hover:text-lime-400",
-    ghost:
-      "bg-transparent text-gray-300 hover:text-white hover:bg-white/10",
+const Button = ({ children, variant = 'primary', className = '', ...props }) => {
+  const baseClasses = "px-4 py-2 rounded-xl font-medium transition-all duration-300 flex items-center gap-2";
+  const variants = {
+    primary: "bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105",
+    secondary: "bg-slate-800/50 backdrop-blur-sm border border-purple-400/30 text-white hover:bg-slate-700/50 hover:border-purple-400/50",
+    outline: "border border-purple-400/50 text-purple-300 hover:bg-purple-400/10 hover:border-purple-400",
+    ghost: "text-white hover:text-purple-300 hover:bg-white/5"
   };
-
+  
   return (
-    <button
-      type={type}
-      className={`${baseStyles} ${variantStyle[variant]} ${className}`}
-      {...otherProps}
-    >
+    <button className={`${baseClasses} ${variants[variant]} ${className}`} {...props}>
       {children}
     </button>
   );

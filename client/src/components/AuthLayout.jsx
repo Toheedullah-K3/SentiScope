@@ -17,7 +17,7 @@ const AuthLayout = ({
             setLoading(false)
         }
     },[authStatus,authentication, navigate])
-
+ 
   return loading ? <p>Loading...</p> : <>{children}</>
     
 }
