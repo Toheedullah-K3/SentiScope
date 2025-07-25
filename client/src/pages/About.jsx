@@ -4,42 +4,21 @@ import {
   Brain, 
   Globe, 
   BarChart3, 
-  Sparkles, 
-  ArrowRight, 
-  Search, 
-  TrendingUp, 
-  MessageCircle, 
   Users, 
-  Star, 
-  Play, 
-  ChevronDown, 
-  Zap, 
-  Clock, 
-  Shield, 
   Target, 
-  Eye, 
-  Activity,
   Heart,
-  Award,
-  Lightbulb,
   Code,
-  Database,
-  Palette,
-  Coffee,
   Github,
   Linkedin,
   Twitter,
   Mail,
-  MapPin,
   Calendar,
   Rocket,
   BookOpen,
-  Briefcase,
   GraduationCap,
   Trophy,
   Cpu,
   FlaskConical,
-  Network,
   Microscope,
   Building,
   Users2
@@ -877,11 +856,11 @@ const AboutUs = () => {
       {[...Array(15)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-0.5 h-0.5 bg-purple-400/20 rounded-full"
+          className="absolute w-1 h-1 bg-purple-400/20 rounded-full"
           animate={{
             x: [0, Math.random() * 100 - 50],
             y: [0, Math.random() * 100 - 50],
-            opacity: [0.2, 0.6, 0.2],
+            opacity: [0.4, 0.6, 0.4],
           }}
           transition={{
             duration: 4 + Math.random() * 2,
