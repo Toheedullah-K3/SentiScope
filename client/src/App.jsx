@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Outlet } from "react-router-dom";
-import { Navbar } from "./components/index.js"
+import { Navbar, Footer } from "./components/index.js"
 
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,6 +43,7 @@ function App() {
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <Navbar />
         <Outlet />
+        <Footer />
       </ThemeProvider>
     </>
   );

@@ -20,7 +20,7 @@ import Accordion from "./Accordion.jsx";
 import TeamMember from "./TeamMember.jsx";
 import Timeline from "./TimeLine.jsx";
 import ValueCard from "./ValueCard.jsx";
-
+import Footer from "./Footer.jsx";
 
 export { 
     Navbar,
@@ -44,7 +44,8 @@ export {
     Accordion,
     TeamMember,
     Timeline,
-    ValueCard
+    ValueCard,
+    Footer
 };
 
 
