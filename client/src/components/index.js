@@ -17,6 +17,10 @@ import WordCloudChart from "./WordCloudChart.jsx";
 import ComparisonLineChart from "./ComparisonLineChart.jsx";
 import TopicSharePie from "./TopicSharePie.jsx";
 import Accordion from "./Accordion.jsx";
+import TeamMember from "./TeamMember.jsx";
+import Timeline from "./TimeLine.jsx";
+import ValueCard from "./ValueCard.jsx";
+
 
 export { 
     Navbar,
@@ -37,7 +41,10 @@ export {
     WordCloudChart,
     ComparisonLineChart,
     TopicSharePie,
-    Accordion
+    Accordion,
+    TeamMember,
+    Timeline,
+    ValueCard
 };
 
 
