@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 
 import { FeatureCard, Accordion } from "@/components";
-import { faqs, features } from "@/components/data/faqs";
+import { faqs, features } from "@/components/data";
 
 
 const Help = () => {
