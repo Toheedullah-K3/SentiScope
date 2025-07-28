@@ -17,7 +17,7 @@ const ValueCard = ({ value, index }) => {
           className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           initial={false}
         />
-        
+         
         <motion.div
           className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${value.color} flex items-center justify-center mb-6 relative z-10`}
           whileHover={{ rotate: 360, scale: 1.1 }}

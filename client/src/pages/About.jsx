@@ -3,30 +3,13 @@ import { motion } from 'framer-motion';
 import { Button, TeamMember, Timeline, ValueCard } from '@/components';
 import { teamMembers, projectValues, stats } from '@/components/data';
 import { 
-  Brain, 
-  Globe, 
-  BarChart3, 
-  Users, 
-  Target, 
   Heart,
-  Code,
-  Github,
-  Linkedin,
-  Twitter,
   Mail,
-  Calendar,
   Rocket,
-  BookOpen,
   GraduationCap,
   Trophy,
-  Cpu,
-  FlaskConical,
-  Microscope,
   Building,
-  Users2
 } from 'lucide-react';
-
-
 
 
 

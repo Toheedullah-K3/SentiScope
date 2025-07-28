@@ -9,12 +9,9 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  PieChart,
-  Pie,
   Cell,
   BarChart,
   Bar,
-  Legend,
   LineChart,
   Line
 } from 'recharts';
@@ -29,7 +26,6 @@ import {
   Target,
   Activity,
   CheckCircle2,
-  AlertCircle,
   TrendingUp,
   Users,
   Layers,
@@ -37,8 +33,6 @@ import {
   Cpu,
   FileText,
   Eye,
-  Download,
-  Filter
 } from 'lucide-react';
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';

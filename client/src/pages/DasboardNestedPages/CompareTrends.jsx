@@ -4,14 +4,13 @@ import { useState } from "react";
 import {
   ComparisonLineChart,
   TopicSharePie,
-  StatCard, // Assuming these are still used, though not explicitly in the provided code for this section
-  Input, // Assuming these are still used
-  Button, // Assuming these are still used
-  Radio // Assuming these are still used
+  StatCard, 
+  Input, 
+  Button, 
+  Radio 
 } from "@/components";
 import { 
-  FileText, 
-  Smile, 
+  FileText,  
   GitCompare, 
   TrendingUp, 
   BarChart3, 
@@ -23,7 +22,6 @@ import {
   ArrowRight,
   Target,
   Activity,
-  AlertCircle,
   CheckCircle2
 } from "lucide-react";
 
