@@ -21,7 +21,7 @@ import TeamMember from "./TeamMember.jsx";
 import Timeline from "./TimeLine.jsx";
 import ValueCard from "./ValueCard.jsx";
 import Footer from "./Footer.jsx";
-
+import FeatureCard from "./FeatureCard.jsx";
 export { 
     Navbar,
     Button,
@@ -45,7 +45,8 @@ export {
     TeamMember,
     Timeline,
     ValueCard,
-    Footer
+    Footer,
+    FeatureCard
 };
 
 
