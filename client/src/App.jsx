@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Navbar, Footer } from "./components/index.js"
 
 import axios from "axios";
@@ -12,6 +12,7 @@ function App() {
   const apiUrl = import.meta.env.VITE_API_URL
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
 
   const fetchCurrentUser = useCallback(async () => {
     async () => {
@@ -38,12 +39,14 @@ function App() {
     fetchCurrentUser()
   }, [fetchCurrentUser]);
 
+
+  const isDashboardPage = location.pathname.startsWith("/dashboard");
   return (
     <>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <Navbar />
         <Outlet />
-        <Footer />
+        {!isDashboardPage && <Footer />}
       </ThemeProvider>
     </>
   );
