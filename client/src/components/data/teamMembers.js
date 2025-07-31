@@ -3,7 +3,7 @@ import { Github, Linkedin, Mail } from 'lucide-react';
 export const teamMembers = [
     {
       name: "Toheed Ullah Khan",
-      role: "FYP Team Lead & Full-Stack Developer",
+      role: "Full-Stack Developer",
       university: "International Islamic University, Islamabad",
       bio: "Final year Computer Science student passionate about AI and machine learning. Leading the development of SentiScope with expertise in full-stack development and sentiment analysis systems.",
       avatar: "TK",
@@ -18,7 +18,7 @@ export const teamMembers = [
     },
     {
       name: "Bilal Asghar",
-      role: "FYP Co-Developer & NLP Engineer",
+      role: "NLP Engineer",
       university: "International Islamic University, Islamabad",
       bio: "Final year Computer Science student specializing in Natural Language Processing and data science. Expert in sentiment analysis models, data visualization, and AI model integration.",
       avatar: "BA",
