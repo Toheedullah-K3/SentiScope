@@ -2,10 +2,7 @@ import axios from "axios";
 import SearchRequest from "../models/searchRequest.model.js";
 import SearchResult from "../models/searchResult.model.js";
 
-/**
- * Perform clustering analysis on social media data
- * POST /api/clustering
- */
+
 const performClustering = async (req, res) => {
   try {
     const {
@@ -17,7 +14,7 @@ const performClustering = async (req, res) => {
       features = ['sentiment', 'engagement']
     } = req.body;
 
-    // Validation
+    
     if (!query || query.trim() === '') {
       return res.status(400).json({
         success: false,

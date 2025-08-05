@@ -4,9 +4,7 @@ from flask import Flask, request, jsonify
 import requests
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-import openai
 from datetime import datetime, timezone
-
 
 import praw
 from dotenv import load_dotenv
@@ -17,9 +15,10 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-
 load_dotenv()
 
+# Global variable for Hugging Face model (loads once, reuses many times)
+_sentiment_pipeline = None
 
 # GNews API Integration
 def fetch_gnews_posts(search_query):
@@ -55,13 +54,14 @@ def fetch_gnews_posts(search_query):
             all_articles.extend(articles)
 
             # Optional: stop after a certain number of total articles
-            if len(all_articles) >= 100:  # Limit to a maximum of 300 articles
+            if len(all_articles) >= 100:  # Limit to a maximum of 100 articles
                 break
 
             page += 1  # Increment to fetch the next page
 
-        # Format and return the articles as you wish
-        return [article['title'] + " - " + article.get('description', '') for article in all_articles]
+        # Format and return the articles
+        return [{'text': article['title'] + " - " + article.get('description', ''), 
+                'timestamp': article.get('publishedAt', '')} for article in all_articles]
 
     except Exception as e:
         logger.error(f"GNews API Error: {e}")
@@ -96,57 +96,80 @@ def fetch_reddit_posts(search_query):
         logger.error(f"Reddit API Error: {e}")
         return []
 
-
 def get_textblob_sentiment(text):
     """
     Analyze sentiment using TextBlob
-    Returns a sentiment score between -1 and 1
+    Returns a sentiment score between 0 and 1
     """
     blob = TextBlob(text)
-    rounded_score = round((blob.sentiment.polarity + 1) /2, 2)  # Normalize to [0, 1]
+    rounded_score = round((blob.sentiment.polarity + 1) / 2, 2)  # Normalize to [0, 1]
     return rounded_score
 
 def get_vader_sentiment(text):
     """
     Analyze sentiment using VADER
-    Returns a compound sentiment score between -1 and 1
+    Returns a compound sentiment score between 0 and 1
     """
     analyzer = SentimentIntensityAnalyzer()
     rounded_score = round((analyzer.polarity_scores(text)['compound'] + 1) / 2, 2)  # Normalize to [0, 1]
-    return  rounded_score
+    return rounded_score
 
 def get_genai_sentiment(text):
     """
-    Analyze sentiment using OpenAI's GPT model
-    Returns a sentiment score between -1 and 1
+    Analyze sentiment using Hugging Face transformers (FREE)
+    Uses a robust Twitter-trained model for better social media sentiment analysis
     """
+    global _sentiment_pipeline
+    
     try:
-        openai.api_key = os.getenv('OPENAI_API_KEY')
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a sentiment analysis assistant. Analyze the sentiment of the following text and return a score between -1 (very negative) and 1 (very positive)."},
-                {"role": "user", "content": f"Analyze the sentiment of this text: {text}"}
-            ]
-        )
+        # Initialize the pipeline only once (first time)
+        if _sentiment_pipeline is None:
+            logger.info("Loading Hugging Face sentiment model (one-time download)...")
+            from transformers import pipeline
+            _sentiment_pipeline = pipeline(
+                "sentiment-analysis", 
+                model="cardiffnlp/twitter-roberta-base-sentiment-latest",
+                return_all_scores=True
+            )
+            logger.info("✅ Hugging Face model loaded successfully!")
         
-        # Extract sentiment score from model response
-        sentiment_text = response.choices[0].message.content.strip().lower()
+        # Clean and truncate text for better processing
+        text = text.strip()
+        if len(text) > 500:
+            text = text[:500] + "..."
         
-        # Try to convert response to float
-        try:
-            return float(sentiment_text)
-        except ValueError:
-            # Fallback sentiment parsing
-            if 'negative' in sentiment_text:
-                return -0.5
-            elif 'positive' in sentiment_text:
-                return 0.5
-            else:
-                return 0
+        # Skip very short texts
+        if len(text) < 10:
+            return 0.5
+        
+        # Get sentiment scores
+        results = _sentiment_pipeline(text)[0]  # [0] because return_all_scores=True returns a list
+        
+        # Extract scores for each sentiment
+        negative_score = next((r['score'] for r in results if r['label'] == 'LABEL_0'), 0)
+        neutral_score = next((r['score'] for r in results if r['label'] == 'LABEL_1'), 0)
+        positive_score = next((r['score'] for r in results if r['label'] == 'LABEL_2'), 0)
+        
+        # Calculate compound score similar to VADER (0 = negative, 1 = positive)
+        total = positive_score + neutral_score + negative_score
+        if total == 0:
+            logger.warning("⚠️ Zero division avoided: All sentiment scores are 0. Defaulting to neutral.")
+            return 0.5  # neutral default
+
+        compound_score = (positive_score + (neutral_score * 0.5)) / total
+
+        
+        return round(compound_score, 2)
+        
+    except ImportError:
+        logger.warning("⚠️  Hugging Face transformers not installed. Install with: pip install transformers torch")
+        logger.info("Falling back to VADER sentiment analysis...")
+        return get_vader_sentiment(text)
     except Exception as e:
-        logger.error(f"GenAI Sentiment Analysis Error: {e}")
-        return 0
+        logger.error(f"Hugging Face Sentiment Analysis Error: {e}")
+        # Fallback to VADER if Hugging Face fails
+        logger.info("Falling back to VADER sentiment analysis...")
+        return get_vader_sentiment(text)
 
 # Main Sentiment Analysis Route
 @app.route("/", methods=["POST"])
@@ -160,7 +183,6 @@ def analyze_sentiment():
         search_query = data.get("search")
         platform = data.get("platform")
         model = data.get("model")
-
 
         # Validate inputs
         if not all([search_query, platform, model]):
@@ -181,7 +203,7 @@ def analyze_sentiment():
         else:
             posts = []
 
-        # Check which model is selected for 
+        # Check which model is selected
         if model == 'textblob':
             sentiment_func = get_textblob_sentiment
         elif model == 'vader':
@@ -199,8 +221,11 @@ def analyze_sentiment():
             if platform == 'reddit':
                 date_str = datetime.fromtimestamp(raw_time, tz=timezone.utc).strftime('%Y-%m-%d')
             elif platform == 'gnews':
-                from dateutil import parser
-                date_str = parser.parse(raw_time).strftime('%Y-%m-%d')
+                try:
+                    from dateutil import parser
+                    date_str = parser.parse(raw_time).strftime('%Y-%m-%d')
+                except:
+                    date_str = datetime.now().strftime('%Y-%m-%d')
             else:
                 date_str = None
 
@@ -234,11 +259,10 @@ def setup_environment():
     Validate environment variables on startup
     """
     required_vars = [
-        'TWITTER_BEARER_TOKEN', 'TWITTER_API_KEY', 'TWITTER_API_SECRET', 
-        'TWITTER_ACCESS_TOKEN', 'TWITTER_ACCESS_TOKEN_SECRET',
-        'FACEBOOK_ACCESS_TOKEN',
-        'REDDIT_CLIENT_ID', 'REDDIT_CLIENT_SECRET', 'REDDIT_USER_AGENT',
-        'OPENAI_API_KEY'
+        'REDDIT_CLIENT_ID', 
+        'REDDIT_CLIENT_SECRET', 
+        'REDDIT_USER_AGENT',
+        'GNEWS_API_KEY'
     ]
     
     missing_vars = [var for var in required_vars if not os.getenv(var)]
@@ -246,10 +270,20 @@ def setup_environment():
     if missing_vars:
         logger.error(f"Missing environment variables: {', '.join(missing_vars)}")
         raise EnvironmentError("Please set all required environment variables")
+    
+    # Check if Hugging Face transformers is available
+    try:
+        import transformers
+        logger.info("✅ Hugging Face transformers available - GenAI sentiment analysis ready!")
+    except ImportError:
+        logger.warning("⚠️  Hugging Face transformers not installed. GenAI will fallback to VADER.")
+        logger.info("Install with: pip install transformers torch")
+    
+    logger.info("🚀 App setup complete!")
 
 if __name__ == "__main__":
     # Validate environment before starting
     setup_environment()
     
-    # Run the Flask ap
+    # Run the Flask app
     app.run(host='0.0.0.0', port=5000, debug=True)
