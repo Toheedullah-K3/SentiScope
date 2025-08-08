@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Brain, User, LogOut, TrendingUp, Activity, Home, Info, Sparkles, Search, Bell, Settings } from 'lucide-react';
+import { Menu, X, Brain, User, TrendingUp, Activity, Home, Info, Sparkles, Bell, Settings } from 'lucide-react';
 import { Button, LogoutBtn } from '../index.js';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { SidebarContext } from '../SidebarItemParent.jsx';
 
@@ -51,7 +51,7 @@ const Navbar = () => {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  // Landing Page Navbar (unchanged)
+  // Landing Page Navbar 
   if (!isDashboard) {
     return (
       <SidebarContext.Provider value={{ expanded, setExpanded }}>
@@ -84,9 +84,9 @@ const Navbar = () => {
                 transition={{ duration: 0.2 }}
               >
                 <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-xl blur opacity-20"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-xl blur opacity-20"></div> 
                   <div className="relative bg-gradient-to-r from-purple-600 to-indigo-600 p-2 rounded-xl">
-                    <Brain className="w-6 h-6 text-white" />
+                    <Brain className="w-6 h-6" />
                   </div>
                 </div>
                 <div>

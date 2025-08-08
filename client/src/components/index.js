@@ -22,6 +22,7 @@ import Timeline from "./TimeLine.jsx";
 import ValueCard from "./ValueCard.jsx";
 import Footer from "./Footer.jsx";
 import FeatureCard from "./FeatureCard.jsx";
+
 export { 
     Navbar,
     Button,
@@ -46,7 +47,7 @@ export {
     Timeline,
     ValueCard,
     Footer,
-    FeatureCard
+    FeatureCard,
 };
 
 

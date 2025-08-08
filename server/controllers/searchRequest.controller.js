@@ -33,6 +33,7 @@ const getSearchRequest = async (req, res) => {
     const { total_posts, average_sentiment, sentiment_details } = response.data;
 
     if (!total_posts || sentiment_details.length === 0) {
+      console.log("No results for:", search);
       return res.status(404).json({ error: "No results found" });
     }
 

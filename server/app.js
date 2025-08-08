@@ -21,12 +21,13 @@ app.use(express.json())
 // routes import
 import userRouter from './routes/user.route.js'
 import searchRequestRouter from './routes/searchRequest.routes.js'
-import clusteringRouter from './routes/clusteringRoutes.js'  // Add this line
+import clusteringRouter from './routes/clusteringRoutes.js'  
 
 // routes
 app.use('/api/v1/users', userRouter)
 app.use('/api/v1/search', searchRequestRouter)
-app.use('/api/clustering', clusteringRouter)  // Add this line
+app.use('/api/clustering', clusteringRouter)
+
 
 // Add a test route to verify server is working
 app.get('/api/test', (req, res) => {

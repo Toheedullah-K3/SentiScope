@@ -5,6 +5,7 @@ import requests
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from datetime import datetime, timezone
+ 
 
 import praw
 from dotenv import load_dotenv
@@ -81,7 +82,11 @@ def fetch_reddit_posts(search_query):
             full_text = f"{submission.title} {submission.selftext}".strip()
 
             # Basic relevance filter: must contain query terms
-            if len(full_text) < 15 or search_query.lower() not in full_text.lower():
+            if len(full_text) < 15:
+                continue
+            
+            query_terms = search_query.lower().split()
+            if not any(term in full_text.lower() for term in query_terms):
                 continue
 
             posts.append({
@@ -252,6 +257,51 @@ def analyze_sentiment():
     except Exception as e:
         logger.error(f"Sentiment Analysis Error: {e}")
         return jsonify({"error": str(e)}), 500
+
+@app.route("/api/suggestions", methods=["POST"])
+def get_suggestions():
+    """AI suggestions endpoint"""
+    try:
+        data = request.get_json()
+        context_type = data.get('context_type')
+        context_data = data.get('data', {})
+        
+        suggestion = ai_suggestions.get_ai_suggestion(context_type, context_data)
+        
+        return jsonify({
+            'suggestion': suggestion,
+            'context_type': context_type,
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Suggestions API error: {e}")
+        return jsonify({'error': 'Failed to get suggestion'}), 500
+
+@app.route("/api/suggestions/batch", methods=["POST"])  
+def get_batch_suggestions():
+    """Get multiple suggestions at once"""
+    try:
+        data = request.get_json()
+        requests_data = data.get('requests', [])
+        
+        suggestions = []
+        for req_data in requests_data:
+            context_type = req_data.get('context_type')
+            context_data = req_data.get('data', {})
+            
+            suggestion = ai_suggestions.get_ai_suggestion(context_type, context_data)
+            suggestions.append({
+                'context_type': context_type,
+                'suggestion': suggestion
+            })
+        
+        return jsonify({'suggestions': suggestions})
+        
+    except Exception as e:
+        logger.error(f"Batch suggestions error: {e}")
+        return jsonify({'error': 'Failed to get suggestions'}), 500
+
 
 # Configuration and Startup
 def setup_environment():
