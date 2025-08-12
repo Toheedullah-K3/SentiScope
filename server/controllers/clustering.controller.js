@@ -343,6 +343,9 @@ const performAdvancedClustering = async (featuresData, algorithm, numClusters, o
       case 'gaussian':
         ({ labels, centroids } = performGaussianMixtureClustering(featuresData, numClusters));
         break;
+      case 'spectral':
+        ({ labels, centroids } = performSpectralClustering(featuresData, numClusters));
+        break;
       default:
         ({ labels, centroids } = performKMeansClustering(featuresData, numClusters));
     }
@@ -387,6 +390,221 @@ const performAdvancedClustering = async (featuresData, algorithm, numClusters, o
     console.error('Error in clustering algorithm:', error);
     throw new Error(`Clustering failed: ${error.message}`);
   }
+};
+
+// NEW: Spectral Clustering Implementation
+const performSpectralClustering = (data, k) => {
+  try {
+    console.log('Performing Spectral Clustering...');
+    const points = data.map(d => d.features);
+    
+    if (!points || points.length === 0) {
+      throw new Error('No data points provided for spectral clustering');
+    }
+
+    if (k > points.length) {
+      throw new Error(`Number of clusters (${k}) cannot exceed number of data points (${points.length})`);
+    }
+
+    const n = points.length;
+    
+    // Step 1: Construct similarity matrix using RBF (Gaussian) kernel
+    const sigma = calculateOptimalSigma(points);
+    const similarityMatrix = constructSimilarityMatrix(points, sigma);
+    
+    // Step 2: Construct degree matrix
+    const degreeMatrix = constructDegreeMatrix(similarityMatrix);
+    
+    // Step 3: Construct normalized Laplacian matrix
+    const laplacianMatrix = constructNormalizedLaplacian(similarityMatrix, degreeMatrix);
+    
+    // Step 4: Compute eigenvectors (simplified eigendecomposition)
+    const { eigenvectors } = computeEigenvectors(laplacianMatrix, k);
+    
+    // Step 5: Normalize eigenvector matrix
+    const normalizedEigenvectors = normalizeEigenvectorMatrix(eigenvectors);
+    
+    // Step 6: Apply K-means clustering to the normalized eigenvector matrix
+    const spectralFeatures = normalizedEigenvectors.map(row => ({ features: row }));
+    const { labels } = performKMeansClustering(spectralFeatures, k);
+    
+    // Calculate centroids in original feature space
+    const centroids = calculateSpectralCentroids(points, labels, k);
+    
+    console.log(`Spectral clustering completed with ${k} clusters`);
+    return { labels, centroids };
+    
+  } catch (error) {
+    console.error('Error in Spectral clustering:', error);
+    console.warn('Spectral clustering failed, falling back to k-means');
+    return performKMeansClustering(data, k);
+  }
+};
+
+// Helper functions for Spectral Clustering
+const calculateOptimalSigma = (points) => {
+  try {
+    // Calculate average distance between points to determine optimal sigma
+    let totalDistance = 0;
+    let count = 0;
+    const sampleSize = Math.min(100, points.length); // Sample for efficiency
+    
+    for (let i = 0; i < sampleSize; i++) {
+      for (let j = i + 1; j < sampleSize; j++) {
+        totalDistance += euclideanDistance(points[i], points[j]);
+        count++;
+      }
+    }
+    
+    const avgDistance = totalDistance / count;
+    return avgDistance * 0.5; // Scale factor for RBF kernel
+  } catch (error) {
+    return 1.0; // Default sigma
+  }
+};
+
+const constructSimilarityMatrix = (points, sigma) => {
+  const n = points.length;
+  const matrix = Array(n).fill(null).map(() => Array(n).fill(0));
+  
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      if (i === j) {
+        matrix[i][j] = 1.0;
+      } else {
+        const distance = euclideanDistance(points[i], points[j]);
+        // RBF (Gaussian) kernel: exp(-||xi - xj||^2 / (2 * sigma^2))
+        matrix[i][j] = Math.exp(-(distance * distance) / (2 * sigma * sigma));
+      }
+    }
+  }
+  
+  return matrix;
+};
+
+const constructDegreeMatrix = (similarityMatrix) => {
+  const n = similarityMatrix.length;
+  const degreeMatrix = Array(n).fill(null).map(() => Array(n).fill(0));
+  
+  for (let i = 0; i < n; i++) {
+    const degree = similarityMatrix[i].reduce((sum, val) => sum + val, 0);
+    degreeMatrix[i][i] = degree;
+  }
+  
+  return degreeMatrix;
+};
+
+const constructNormalizedLaplacian = (similarityMatrix, degreeMatrix) => {
+  const n = similarityMatrix.length;
+  const laplacian = Array(n).fill(null).map(() => Array(n).fill(0));
+  
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      if (i === j) {
+        laplacian[i][j] = 1.0;
+      } else {
+        const di = degreeMatrix[i][i];
+        const dj = degreeMatrix[j][j];
+        if (di > 0 && dj > 0) {
+          laplacian[i][j] = -similarityMatrix[i][j] / Math.sqrt(di * dj);
+        }
+      }
+    }
+  }
+  
+  return laplacian;
+};
+
+const computeEigenvectors = (matrix, k) => {
+  try {
+    // Simplified power iteration method for finding dominant eigenvectors
+    const n = matrix.length;
+    const eigenvectors = [];
+    
+    for (let i = 0; i < k; i++) {
+      // Initialize random vector
+      let vector = Array(n).fill(0).map(() => Math.random() - 0.5);
+      
+      // Power iteration
+      for (let iter = 0; iter < 50; iter++) {
+        // Matrix-vector multiplication
+        const newVector = Array(n).fill(0);
+        for (let row = 0; row < n; row++) {
+          for (let col = 0; col < n; col++) {
+            newVector[row] += matrix[row][col] * vector[col];
+          }
+        }
+        
+        // Normalize vector
+        const norm = Math.sqrt(newVector.reduce((sum, val) => sum + val * val, 0));
+        if (norm > 1e-10) {
+          vector = newVector.map(val => val / norm);
+        }
+      }
+      
+      eigenvectors.push(vector);
+      
+      // Deflation: remove the found eigenvector from the matrix (simplified)
+      for (let row = 0; row < n; row++) {
+        for (let col = 0; col < n; col++) {
+          matrix[row][col] -= vector[row] * vector[col];
+        }
+      }
+    }
+    
+    // Transpose to get eigenvector matrix in correct format
+    const transposed = Array(n).fill(null).map(() => Array(k).fill(0));
+    for (let i = 0; i < n; i++) {
+      for (let j = 0; j < k; j++) {
+        transposed[i][j] = eigenvectors[j][i];
+      }
+    }
+    
+    return { eigenvectors: transposed };
+  } catch (error) {
+    console.error('Error computing eigenvectors:', error);
+    // Return identity matrix as fallback
+    const n = matrix.length;
+    const identity = Array(n).fill(null).map((_, i) => 
+      Array(k).fill(0).map((_, j) => i === j ? 1 : 0)
+    );
+    return { eigenvectors: identity };
+  }
+};
+
+const normalizeEigenvectorMatrix = (eigenvectors) => {
+  return eigenvectors.map(row => {
+    const norm = Math.sqrt(row.reduce((sum, val) => sum + val * val, 0));
+    if (norm > 1e-10) {
+      return row.map(val => val / norm);
+    }
+    return row;
+  });
+};
+
+const calculateSpectralCentroids = (originalPoints, labels, k) => {
+  const centroids = [];
+  const dimensions = originalPoints[0].length;
+  
+  for (let cluster = 0; cluster < k; cluster++) {
+    const clusterPoints = originalPoints.filter((_, i) => labels[i] === cluster);
+    
+    if (clusterPoints.length === 0) {
+      // If no points in cluster, use random centroid
+      centroids.push(Array(dimensions).fill(0).map(() => Math.random()));
+    } else {
+      // Calculate mean of points in cluster
+      const centroid = Array(dimensions).fill(0);
+      for (const point of clusterPoints) {
+        for (let dim = 0; dim < dimensions; dim++) {
+          centroid[dim] += point[dim] || 0;
+        }
+      }
+      centroids.push(centroid.map(val => val / clusterPoints.length));
+    }
+  }
+  
+  return centroids;
 };
 
 // Enhanced K-Means implementation with better error handling
@@ -809,7 +1027,7 @@ const extractClusterKeywords = (clusterPoints) => {
   return ['keyword1', 'keyword2', 'keyword3']; // Simplified
 };
 
-// Export functions (add the missing ones)
+// Export functions (updated to include spectral clustering)
 const getPlatforms = (req, res) => {
   res.json(['reddit', 'twitter', 'facebook']);
 };
@@ -819,7 +1037,7 @@ const getSentimentModels = (req, res) => {
 };
 
 const getAlgorithms = (req, res) => {
-  res.json(['kmeans', 'hierarchical', 'dbscan', 'gaussian']);
+  res.json(['kmeans', 'hierarchical', 'dbscan', 'gaussian', 'spectral']);
 };
 
 const getClusteringHistory = async (req, res) => {

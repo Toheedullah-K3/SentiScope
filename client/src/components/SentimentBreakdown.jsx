@@ -1,7 +1,7 @@
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
 
-const COLORS = ['#10B981', '#EF4444', '#F59E0B']; // green, red, yellow
+const COLORS = ['#10B981', '#EF4444', '#F59E0B']; 
 
 const SentimentBreakdown = ({ sentimentDetails }) => {
   if (!sentimentDetails || sentimentDetails.length === 0) return null;

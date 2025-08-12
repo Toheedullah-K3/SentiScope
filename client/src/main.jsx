@@ -15,6 +15,10 @@ import UserProfile from './pages/UserProfile.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import About from './pages/About.jsx'
 import { AuthLayout } from './components/index.js'
+import { ForgotPassword, ResetPassword } from './components/index.js'
+import Trending from './pages/Trending'
+import Highlights from './pages/Highlight'
+
 
 // Dashboard Pages
 import SearchAnalyze from './pages/DasboardNestedPages/SearchAnalyze.jsx'
@@ -43,6 +47,22 @@ const routes = createRoutesFromElements(
       }
     />
     <Route
+      path="/forgot-password"
+      element={
+        <AuthLayout authentication={false}>
+          <ForgotPassword />
+        </AuthLayout>
+      }
+    />
+    <Route
+      path="/reset-password/:token"
+      element={
+        <AuthLayout authentication={false}>
+          <ResetPassword />
+        </AuthLayout>
+      }
+    />
+    <Route
       path="/about-us"
       element={
         <AuthLayout authentication={false}>
@@ -50,6 +70,24 @@ const routes = createRoutesFromElements(
         </AuthLayout>
       }
     />
+    <Route
+      path="/trending"
+      element={
+        <AuthLayout authentication={false}>
+          <Trending />
+        </AuthLayout>
+      }
+    />
+    <Route
+      path="/highlights"
+      element={
+        <AuthLayout authentication={false}>
+          <Highlights />
+        </AuthLayout>
+      }
+    />
+
+      
     <Route
       path="/user-profile"
       element={
@@ -105,7 +143,7 @@ const router = createBrowserRouter(routes);
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <RouterProvider router={router} />,
+      <RouterProvider router={router} />
     </PersistGate>
   </Provider>
 )

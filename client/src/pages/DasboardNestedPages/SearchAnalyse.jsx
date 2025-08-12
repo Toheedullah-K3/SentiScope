@@ -137,7 +137,6 @@ const SearchAnalyze = () => {
 
       navigate(`/dashboard/sentiment-analysis?id=${searchRequestId}`);
     } catch (error) {
-      console.log("HELLO I RAN -------------------")
       console.error("Search failed:", error);
       setLoadingStage('Error occurred');
       setProgress(0);

@@ -9,25 +9,6 @@ const getSearchRequest = async (req, res) => {
     return res.status(400).json({ error: "Missing query, model, or platform" });
   }
 
-  // const existingRequest = await SearchRequest.findOne({ searchQuery: search, model, platform });
-
-  // if (existingRequest) {
-  //   const searchResults = await SearchResult.find({ searchRequestId: existingRequest._id });
-
-  //   return res.status(200).json({
-  //     message: "Search request already exists",
-  //     total_posts: existingRequest.totalPosts,
-  //     average_sentiment: existingRequest.averageSentimentScore,
-  //     sentiment_details: searchResults.map((result) => ({
-  //       description: result.postText,
-  //       sentiment_score: result.sentimentScore,
-  //       date: result.postCreatedAt,
-  //       subreddit: result.subreddit || "N/A"
-  //     })),
-  //     searchRequestId: existingRequest._id
-  //   });
-  // }
-
   try {
     const response = await axios.post("http://127.0.0.1:5000", { search, model, platform });
     const { total_posts, average_sentiment, sentiment_details } = response.data;

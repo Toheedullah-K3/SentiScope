@@ -22,6 +22,8 @@ import Timeline from "./TimeLine.jsx";
 import ValueCard from "./ValueCard.jsx";
 import Footer from "./Footer.jsx";
 import FeatureCard from "./FeatureCard.jsx";
+import ForgotPassword from "./ForgotPassword.jsx";
+import ResetPassword from "./ResetPassword.jsx";
 
 export { 
     Navbar,
@@ -48,6 +50,8 @@ export {
     ValueCard,
     Footer,
     FeatureCard,
+    ForgotPassword,
+    ResetPassword
 };
 
 

@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Button, Input } from '../components/index.js'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { login as authLogin } from '../store/authSlice.js'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
@@ -268,7 +267,7 @@ const Login = () => {
                 {/* Forgot Password Link */}
                 <div className="text-right">
                   <Link 
-                    to="#" 
+                    to="/forgot-password" 
                     className="text-sm text-purple-400 hover:text-purple-300 transition-colors duration-300"
                   >
                     Forgot your password?
