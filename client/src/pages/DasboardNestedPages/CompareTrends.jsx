@@ -172,10 +172,10 @@ const ComparePanel = () => {
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-300 mb-3">Platform</label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3"> {/* Adjusted for mobile */}
+                    <div className="grid grid-cols-2 sm:grid-cols-2 gap-3"> {/* Adjusted for mobile */}
                       {[
                         { value: "reddit", label: "Reddit", icon: "R", color: "orange" },
-                        { value: "twitter", label: "Twitter", icon: "T", color: "blue" },
+                        // { value: "twitter", label: "Twitter", icon: "T", color: "blue" },
                         { value: "gnews", label: "GNews", icon: "N", color: "red" }
                       ].map((platform) => (
                         <label key={platform.value} className="relative cursor-pointer">
@@ -253,10 +253,10 @@ const ComparePanel = () => {
 
                   <div>
                     <label className="block text-sm font-semibold text-gray-300 mb-3">Platform</label>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3"> {/* Adjusted for mobile */}
+                    <div className="grid grid-cols-2 sm:grid-cols-2 gap-3"> {/* Adjusted for mobile */}
                       {[
                         { value: "reddit", label: "Reddit", icon: "R", color: "orange" },
-                        { value: "twitter", label: "Twitter", icon: "T", color: "blue" },
+                        // { value: "twitter", label: "Twitter", icon: "T", color: "blue" },
                         { value: "gnews", label: "GNews", icon: "N", color: "red" }
                       ].map((platform) => (
                         <label key={platform.value} className="relative cursor-pointer">

@@ -68,7 +68,7 @@ const SearchAnalyze = () => {
   const createSearch = async (data) => {
     setIsLoading(true);
     setProgress(0);
-    
+
     // Simulate realistic loading stages
     const stages = [
       { stage: 'Connecting to platform...', duration: 800, progress: 20 },
@@ -76,34 +76,34 @@ const SearchAnalyze = () => {
       { stage: 'Analyzing sentiment...', duration: 1000, progress: 80 },
       { stage: 'Generating insights...', duration: 600, progress: 95 }
     ];
-    
+
     let currentProgress = 0;
-    
+
     // Animate through loading stages
     const animateStages = async () => {
       for (const { stage, duration, progress } of stages) {
         setLoadingStage(stage);
-        
+
         // Smooth progress animation
         const startProgress = currentProgress;
         const progressDiff = progress - startProgress;
         const steps = 20;
         const stepDuration = duration / steps;
-        
+
         for (let i = 0; i <= steps; i++) {
           const newProgress = startProgress + (progressDiff * i) / steps;
           setProgress(newProgress);
           await new Promise(resolve => setTimeout(resolve, stepDuration));
         }
-        
+
         currentProgress = progress;
       }
     };
-    
+
     try {
       // Start loading animation
       const animationPromise = animateStages();
-      
+
       const response = await axios.get(`${apiUrl}/api/v1/search/getSearchRequest`, {
         params: {
           search: data.search,
@@ -115,11 +115,11 @@ const SearchAnalyze = () => {
 
       // Wait for animation to complete
       await animationPromise;
-      
+
       // Final stage
       setLoadingStage('Complete!');
       setProgress(100);
-      
+
       // Brief pause before showing results
       await new Promise(resolve => setTimeout(resolve, 500));
 
@@ -291,23 +291,21 @@ const SearchAnalyze = () => {
                 { label: 'Report Generation', threshold: 95, icon: '📊' }
               ].map((step, index) => (
                 <div key={step.label} className="flex items-center space-x-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm transition-all duration-300 ${
-                    progress >= step.threshold 
-                      ? 'bg-gradient-to-r from-purple-500 to-cyan-500 text-white' 
-                      : progress >= step.threshold - 20 
-                      ? 'bg-slate-600 text-gray-300 animate-pulse' 
-                      : 'bg-slate-700 text-gray-500'
-                  }`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm transition-all duration-300 ${progress >= step.threshold
+                      ? 'bg-gradient-to-r from-purple-500 to-cyan-500 text-white'
+                      : progress >= step.threshold - 20
+                        ? 'bg-slate-600 text-gray-300 animate-pulse'
+                        : 'bg-slate-700 text-gray-500'
+                    }`}>
                     {progress >= step.threshold ? '✓' : step.icon}
                   </div>
                   <div className="flex-1">
-                    <div className={`text-sm font-medium transition-colors duration-300 ${
-                      progress >= step.threshold 
-                        ? 'text-white' 
-                        : progress >= step.threshold - 20 
-                        ? 'text-gray-300' 
-                        : 'text-gray-500'
-                    }`}>
+                    <div className={`text-sm font-medium transition-colors duration-300 ${progress >= step.threshold
+                        ? 'text-white'
+                        : progress >= step.threshold - 20
+                          ? 'text-gray-300'
+                          : 'text-gray-500'
+                      }`}>
                       {step.label}
                     </div>
                   </div>
@@ -348,8 +346,8 @@ const SearchAnalyze = () => {
               className="flex-1 bg-slate-700/50 border border-purple-400/20 text-white placeholder-gray-400 px-4 py-3 rounded-xl focus:ring-2 focus:ring-purple-400"
               {...register("search")}
             />
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={isLoading}
               className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -358,73 +356,73 @@ const SearchAnalyze = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-  {/* Platform Card Group */}
-  <div>
-  <h3 className="text-sm font-semibold text-purple-300 mb-3 flex items-center gap-2">
-    <Globe className="w-4 h-4" />
-    Choose Platform
-  </h3>
-  <div className="grid grid-cols-3 gap-4">
-    {[
-      { label: "GNews", value: "gnews", icon: "N", color: "bg-red-500" },
-      { label: "Reddit", value: "reddit", icon: "R", color: "bg-orange-500" },
-      { label: "Twitter", value: "twitter", icon: "T", color: "bg-blue-500" },
-    ].map((item) => (
-      <label
-        key={item.value}
-        className="relative group cursor-pointer"
-      >
-        <input
-          {...register("platform")}
-          type="radio"
-          value={item.value}
-          className="peer hidden"
-          disabled={isLoading}
-        />
-        <div className="bg-slate-800/40 backdrop-blur-md border border-purple-400/20 rounded-xl px-4 py-3 text-white text-center shadow-sm peer-checked:border-2 peer-checked:border-purple-500 group-hover:scale-[1.02] transition-all duration-300 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed">
-          <div className={`w-6 h-6 ${item.color} rounded-full mx-auto mb-1 text-white flex items-center justify-center font-bold`}>
-            {item.icon}
-          </div>
-          <span className="text-sm font-medium">{item.label}</span>
-        </div>
-      </label>
-    ))}
-  </div>
-</div>
+            {/* Platform Card Group */}
+            <div>
+              <h3 className="text-sm font-semibold text-purple-300 mb-3 flex items-center gap-2">
+                <Globe className="w-4 h-4" />
+                Choose Platform
+              </h3>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { label: "GNews", value: "gnews", icon: "N", color: "bg-red-500" },
+                  { label: "Reddit", value: "reddit", icon: "R", color: "bg-orange-500" },
+                  // { label: "Twitter", value: "twitter", icon: "T", color: "bg-blue-500" },
+                ].map((item) => (
+                  <label
+                    key={item.value}
+                    className="relative group cursor-pointer"
+                  >
+                    <input
+                      {...register("platform")}
+                      type="radio"
+                      value={item.value}
+                      className="peer hidden"
+                      disabled={isLoading}
+                    />
+                    <div className="bg-slate-800/40 backdrop-blur-md border border-purple-400/20 rounded-xl px-4 py-3 text-white text-center shadow-sm peer-checked:border-2 peer-checked:bg-purple-500 group-hover:scale-[1.02] transition-all duration-300 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed">
+                      <div className={`w-6 h-6 ${item.color} rounded-full mx-auto mb-1 text-white flex items-center justify-center font-bold`}>
+                        {item.icon}
+                      </div>
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
 
 
-  {/* Model Card Group */}
-  <div>
-    <h3 className="text-sm font-semibold text-pink-300 mb-3 flex items-center gap-2">
-      <Brain className="w-4 h-4" />
-      Choose Model
-    </h3>
-    <div className="grid grid-cols-3 gap-4">
-      {[
-        { label: "TextBlob", value: "textblob", icon: <BarChart3 className="w-4 h-4 text-cyan-400" /> },
-        { label: "VADER", value: "vader", icon: <Brain className="w-4 h-4 text-purple-400" /> },
-        { label: "GenAI", value: "genai", icon: <Sparkles className="w-4 h-4 text-pink-400" /> }
-      ].map((item) => (
-        <label
-          key={item.value}
-          className="relative group cursor-pointer"
-        >
-          <input
-            {...register("model")}
-            type="radio"
-            value={item.value}
-            className="peer hidden"
-            disabled={isLoading}
-          />
-          <div className="bg-slate-800/40 backdrop-blur-md border border-purple-400/20 rounded-xl px-4 py-3 text-white text-center shadow-sm peer-checked:border-2 peer-checked:border-pink-500 group-hover:scale-[1.02] transition-all duration-300 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed">
-            <div className="flex justify-center mb-1">{item.icon}</div>
-            <span className="text-sm font-medium">{item.label}</span>
+            {/* Model Card Group */}
+            <div>
+              <h3 className="text-sm font-semibold text-pink-300 mb-3 flex items-center gap-2">
+                <Brain className="w-4 h-4" />
+                Choose Model
+              </h3>
+              <div className="grid grid-cols-3 gap-4">
+                {[
+                  { label: "TextBlob", value: "textblob", icon: <BarChart3 className="w-4 h-4 text-cyan-400" /> },
+                  { label: "VADER", value: "vader", icon: <Brain className="w-4 h-4 text-purple-400" /> },
+                  { label: "GenAI", value: "genai", icon: <Sparkles className="w-4 h-4 text-pink-400" /> }
+                ].map((item) => (
+                  <label
+                    key={item.value}
+                    className="relative group cursor-pointer"
+                  >
+                    <input
+                      {...register("model")}
+                      type="radio"
+                      value={item.value}
+                      className="peer hidden"
+                      disabled={isLoading}
+                    />
+                    <div className="bg-slate-800/40 backdrop-blur-md border border-purple-400/20 rounded-xl px-4 py-3 text-white text-center shadow-sm peer-checked:border-2 peer-checked:bg-purple-500 group-hover:scale-[1.02] transition-all duration-300 peer-disabled:opacity-50 peer-disabled:cursor-not-allowed">
+                      <div className="flex justify-center mb-1">{item.icon}</div>
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
           </div>
-        </label>
-      ))}
-    </div>
-  </div>
-</div>
 
         </motion.form>
 
