@@ -67,7 +67,7 @@ import {
 import { useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
 
-const ImprovedClusteringPage = () => {
+const ClusteringPage = () => {
   const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
@@ -1907,5 +1907,5 @@ const ImprovedClusteringPage = () => {
   );
 };
 
-export default ImprovedClusteringPage;
+export default ClusteringPage;
                             
