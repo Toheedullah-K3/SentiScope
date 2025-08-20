@@ -19,7 +19,7 @@ const Dashboard = () => {
           className={`flex-1 overflow-y-auto h-full transition-all duration-300 ${
             expanded ? "lg:ml-64" : "lg:ml-16"
           }`} 
-        >
+        > 
           <Outlet />
         </div>
       </div>

@@ -25,6 +25,11 @@ import FeatureCard from "./FeatureCard.jsx";
 import ForgotPassword from "./ForgotPassword.jsx";
 import ResetPassword from "./ResetPassword.jsx";
 
+
+import ClusteringForm from "./ClusteringForm.jsx";
+import ClusteringResults from "./CLusteringResult.jsx";
+
+
 export { 
     Navbar,
     Button,
@@ -51,7 +56,9 @@ export {
     Footer,
     FeatureCard,
     ForgotPassword,
-    ResetPassword
+    ResetPassword,
+    ClusteringForm,
+    ClusteringResults
 };
 
 
