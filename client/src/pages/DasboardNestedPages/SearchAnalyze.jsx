@@ -9,7 +9,7 @@ import {
   SentimentBreakdown,
   PostTimeline,
   TopKeywords,
-  WordCloudChart,
+  // WordCloudChart,
   Input,
   Button,
   Radio,
@@ -465,7 +465,7 @@ const SearchAnalyze = () => {
               platform={option.platform}
             />
             <SentimentBreakdown sentimentDetails={option.sentiment_details || []} />
-            <WordCloudChart sentimentDetails={option.sentiment_details || []} />
+            {/* <WordCloudChart sentimentDetails={option.sentiment_details || []} />  */}
             <TopKeywords sentimentDetails={option.sentiment_details || []} />
           </motion.div>
         )}

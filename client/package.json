@@ -36,7 +36,6 @@
     "react-hook-form": "^7.54.2",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.5",
-    "react-wordcloud": "^1.2.7",
     "recharts": "^2.15.3",
     "redux-persist": "^6.0.0",
     "stopword": "^3.1.5",
